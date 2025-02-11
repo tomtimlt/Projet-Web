@@ -1,6 +1,7 @@
 :root {
   --primary-color: #ffe031;
   --secondary-color: #213547;
+  --third-color: #000000;
   --background-color: #f5f5f5;
   --white: #ffffff;
   --gray-100: #f3f4f6;
@@ -9,6 +10,7 @@
   --gray-600: #4b5563;
   --text-color: #000000;
   --shadow-color: #818181;
+  --link-color: #1a0dab;
 }
 
 * {
@@ -40,9 +42,9 @@ nav {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  max-width: 1200px;
+  max-width: 1800px;
   margin: 0 auto;
-  padding: 1rem 2rem;
+  padding: 0.2rem 0.5rem;
 }
 
 .logo img {
@@ -70,7 +72,7 @@ nav {
 
 .nav-links a:hover {
   color: var(--primary-color);
-  background-color: #000000;
+  background-color: var(--third-color);
   border-radius: 50px;
   padding: 0.2rem 0.5rem;
   transform: scale(1.1);
@@ -92,7 +94,7 @@ nav {
 }
 
 .connexion-btn:hover {
-  background-color: #000000;
+  background-color:var(--third-color);
   color: var(--primary-color);
   transition: 500ms;
   transform: scale(1.1);
