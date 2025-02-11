@@ -24,7 +24,6 @@ body {
   line-height: 1.6;
   background-color: var(--background-color);
   color: var(--secondary-color);
-
 }
 
 .container {
@@ -37,8 +36,6 @@ body {
 header {
   background-color: var(--white);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  position: sticky;
-  top: 0;
 }
 
 nav {
@@ -51,7 +48,7 @@ nav {
 }
 
 .logo img {
-  height: 80px;;
+  height: 120px;;
   top: 0;
   left: 0;}
 
@@ -212,8 +209,9 @@ html, body {
 footer {
   background-color: var(--white);
   padding: 2rem;
-  margin-top: 4rem;
   text-align: center;
+  width: 100%;
+  margin-top: auto; 
 }
 
 .footer-links {
@@ -262,7 +260,6 @@ footer {
   border-top: 1px solid #ccc;
   display: none;
   transition: 500ms;
-  z-index: 20;
 }
 
 .cookie-notification p {
@@ -502,5 +499,3 @@ display: none;
   transition: 500ms;
   transform: scale(1.1);
 }
-
-
