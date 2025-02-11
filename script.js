@@ -7,22 +7,8 @@ document.addEventListener("DOMContentLoaded", function() {
     const declineButton = document.getElementById("decline-cookies");
     const cookiePolicy = document.getElementById("cookie-policy");
     const validateButton = document.getElementById("validation");
-    const navbar = document.querySelector('.navbar');
-    let lastScroll = 0;
 
     /* Fonction en JS */
-
-window.addEventListener('scroll', function() {
-    const currentScroll = window.pageYOffset;
-    if (currentScroll > 50) {
-        navbar.classListadd('shrink');
-    }
-    else {
-        navbar.classList.remove('shrink');
-    }
-    
-    lastScroll = currentScroll;
-});
 
     if (localStorage.getItem("cookiesAccepted") === "true") {
        cookieNotification.style.display = "block"; // mets none pour que la fonction marche 
@@ -68,5 +54,24 @@ window.addEventListener('scroll', function() {
             }
         });
     });
+
+    document.addEventListener("DOMContentLoaded", function() {
+        const searchBtn = document.querySelector(".search-btn");
+        const searchInput = document.querySelector(".search-bar");
+    
+        if (searchBtn && searchInput) {
+            searchBtn.addEventListener("click", function() {
+                const searchValue = searchInput.value.trim();
+                if (searchValue !== "") {
+                    alert("Recherche en cours pour : " + searchValue);
+                    // filtre
+                } else {
+                    alert("Veuillez entrer un mot-clé.");
+                }
+            });
+        }
+        
+    });
     
 });
+

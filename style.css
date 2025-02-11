@@ -36,21 +36,15 @@ body {
 header {
   background-color: var(--white);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  position: sticky;
-  top: 0;
 }
 
-
-
-.navbar {
+nav {
   display: flex;
   justify-content: space-between;
   align-items: center;
   max-width: 1800px;
   margin: 0 auto;
   padding: 0.2rem 0.5rem;
-  position: sticky;
-  top: 0;
 }
 
 .logo img {
@@ -375,4 +369,135 @@ display: none;
 .forgot-password:hover {
   text-decoration: underline;
 }
+
+/* recherche.html */
+.search-container {
+  text-align: center;
+  padding: 20px;
+}
+
+.search-bar {
+  width: 60%;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid var(--gray-300);
+  font-size: 1rem;
+}
+
+.filter-container {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.filter-container select {
+  padding: 8px;
+  border-radius: 5px;
+  border: 1px solid var(--gray-300);
+  font-size: 1rem;
+}
+
+.search-btn {
+  background-color: var(--primary-color);
+  padding: 10px 15px;
+  border-radius: 5px;
+  color: var(--third-color);
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+  transition: 300ms;
+}
+
+.search-btn:hover {
+  background-color: var(--third-color);
+  color: var(--primary-color);
+}
+
+.results-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 15px;
+  padding: 20px;
+}
+
+.result-card {
+  background-color: var(--white);
+  padding: 15px;
+  width: 300px;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px var(--shadow-color);
+  transition: 300ms;
+}
+
+.result-card:hover {
+  box-shadow: 0 4px 6px var(--shadow-color);
+}
+
+.result-card img {
+  width: 50px;
+  height: 50px;
+  background: black;
+  display: inline-block;
+  border-radius: 5px;
+}
+
+.pagination {
+  text-align: center;
+  margin: 20px 0;
+}
+
+.pagination a {
+  margin: 0 5px;
+  text-decoration: none;
+  padding: 5px 10px;
+  background: var(--gray-200);
+  border-radius: 3px;
+  font-weight: bold;
+  color: var(--secondary-color);
+}
+
+.pagination .active {
+  background: var(--third-color);
+  color: var(--primary-color);
+}
+
+
+
+/* search bar*/
+
+.search-bar {
+  width: 100%;
+  max-width: 400px;
+  padding: 0.75rem 1.5rem;
+  border: 2px solid var(--primary-color);
+  border-radius: 50px;
+  font-size: 1rem;
+  outline: none;
+  transition: all 0.5s ease;
+}
+
+.search-bar:focus {
+  border-color: var(--third-color);
+  box-shadow: 0 0 8px var(--shadow-color);
+}
+
+.search-button {
+  background-color: var(--primary-color);
+  color: var(--white);
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 50px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 500ms;
+}
+.search-button:hover {
+  background-color: var(--third-color);
+  color: var(--primary-color);
+  transition: 500ms;
+  transform: scale(1.1);
+}
+
 
