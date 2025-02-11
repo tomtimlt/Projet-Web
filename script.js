@@ -34,6 +34,13 @@ document.addEventListener("DOMContentLoaded", function() {
         window.location.href = 'connexion.html';
     });
 
+    document.getElementById('index-btn').addEventListener('click', function() {
+        window.location.href = 'index.html';
+    });
+
+    document.getElementById('recherche-btn').addEventListener('click', function() {
+        window.location.href = 'recherche.html';
+    });
     document.addEventListener("DOMContentLoaded", function() {
         const form = document.querySelector(".login-form");
         form.addEventListener("submit", function(event) {
