@@ -316,3 +316,49 @@ display: none;
   border-radius: 50px;
 
 }
+
+.login-container {
+  width: 100%;
+  max-width: 400px;
+  margin: 50px auto;
+  background: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+.login-form label {
+  display: block;
+  text-align: left;
+  margin-top: 10px;
+}
+.login-form input {
+  width: 100%;
+  padding: 10px;
+  margin-top: 5px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+.btn-login {
+  width: 100%;
+  padding: 10px;
+  margin-top: 15px;
+  background: #ffe031;
+  border: none;
+  border-radius: 4px;
+  font-weight: bold;
+  cursor: pointer;
+}
+.btn-login:hover {
+  background: #000;
+  color: #ffe031;
+}
+.forgot-password {
+  display: block;
+  margin-top: 10px;
+  color: #1a0dab;
+  text-decoration: none;
+}
+.forgot-password:hover {
+  text-decoration: underline;
+}

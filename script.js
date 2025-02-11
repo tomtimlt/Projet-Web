@@ -43,5 +43,30 @@ window.addEventListener('scroll', function() {
     validateButton.addEventListener("click", function() {
         cookiePolicy.style.display = "none";
     });
+
+    document.getElementById('connexion-btn').addEventListener('click', function() {
+        window.location.href = 'connexion.html';
+    });
+
+    document.getElementById('index-btn').addEventListener('click', function() {
+        window.location.href = 'index.html';
+    });
+
+    document.getElementById('recherche-btn').addEventListener('click', function() {
+        window.location.href = 'recherche.html';
+    });
+    document.addEventListener("DOMContentLoaded", function() {
+        const form = document.querySelector(".login-form");
+        form.addEventListener("submit", function(event) {
+            event.preventDefault();
+            const username = document.getElementById("username").value;
+            const password = document.getElementById("password").value;
+            if (username && password) {
+                alert("Connexion réussie !");
+            } else {
+                alert("Veuillez remplir tous les champs.");
+            }
+        });
+    });
     
 });
