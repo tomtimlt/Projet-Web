@@ -1,19 +1,19 @@
 document.addEventListener("DOMContentLoaded", function() {
     
-    /* Variable en JS */
-    
+    // Variables en JS
     const cookieNotification = document.getElementById("cookie-notification");
     const acceptButton = document.getElementById("accept-cookies");
     const declineButton = document.getElementById("decline-cookies");
     const cookiePolicy = document.getElementById("cookie-policy");
     const validateButton = document.getElementById("validation");
-
-    /* Fonction en JS */
-
+    const rechercheBtn = document.querySelector(".recherche-btn");
+    const searchContainer = document.querySelector(".search-container");
+    
+    // Gestion des cookies
     if (localStorage.getItem("cookiesAccepted") === "true") {
-       cookieNotification.style.display = "block"; // mets none pour que la fonction marche 
+        cookieNotification.style.display = "none";
     } else {
-        cookieNotification.style.display = "block";
+        cookieNotification.style.display = "flex";
     }
 
     acceptButton.addEventListener("click", function() {
@@ -21,29 +21,49 @@ document.addEventListener("DOMContentLoaded", function() {
         cookieNotification.style.display = "none";
     });
 
+    // Correction: searchButton n'existait pas, utilisation de rechercheBtn à la place
+    rechercheBtn.addEventListener("click", function() {
+        searchContainer.style.display = "flex";
+    });
+
     declineButton.addEventListener("click", function() {
-    cookieNotification.style.display = "none"
-    cookiePolicy.style.display = "block";
+        cookieNotification.style.display = "none";
+        cookiePolicy.style.display = "flex";
     });
 
     validateButton.addEventListener("click", function() {
         cookiePolicy.style.display = "none";
     });
 
-    document.getElementById('connexion-btn').addEventListener('click', function() {
-        window.location.href = 'connexion.html';
-    });
+    // Navigation
+    const connexionBtn = document.querySelector(".connexion-btn");
+    if (connexionBtn) {
+        connexionBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            window.location.href = 'connexion.html';
+        });
+    }
 
-    document.getElementById('index-btn').addEventListener('click', function() {
-        window.location.href = 'index.html';
-    });
+    const indexBtn = document.querySelector(".index-btn");
+    if (indexBtn) {
+        indexBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            window.location.href = 'index.html';
+        });
+    }
 
-    document.getElementById('recherche-btn').addEventListener('click', function() {
-        window.location.href = 'recherche.html';
-    });
-    document.addEventListener("DOMContentLoaded", function() {
-        const form = document.querySelector(".login-form");
-        form.addEventListener("submit", function(event) {
+    const rechercheButton = document.querySelector(".recherche-btn");
+    if (rechercheButton) {
+        rechercheButton.addEventListener('click', function(e) {
+            e.preventDefault();
+            window.location.href = 'recherche.html';
+        });
+    }
+
+    // Gestion du formulaire de connexion (si présent sur la page)
+    const loginForm = document.querySelector(".login-form");
+    if (loginForm) {
+        loginForm.addEventListener("submit", function(event) {
             event.preventDefault();
             const username = document.getElementById("username").value;
             const password = document.getElementById("password").value;
@@ -53,25 +73,21 @@ document.addEventListener("DOMContentLoaded", function() {
                 alert("Veuillez remplir tous les champs.");
             }
         });
-    });
+    }
 
-    document.addEventListener("DOMContentLoaded", function() {
-        const searchBtn = document.querySelector(".search-btn");
-        const searchInput = document.querySelector(".search-bar");
-    
-        if (searchBtn && searchInput) {
-            searchBtn.addEventListener("click", function() {
-                const searchValue = searchInput.value.trim();
-                if (searchValue !== "") {
-                    alert("Recherche en cours pour : " + searchValue);
-                    // filtre
-                } else {
-                    alert("Veuillez entrer un mot-clé.");
-                }
-            });
-        }
-        
-    });
-    
+    // Gestion de la barre de recherche
+    const searchBtn = document.querySelector(".search-btn");
+    const searchInput = document.querySelector(".search-bar");
+
+    if (searchBtn && searchInput) {
+        searchBtn.addEventListener("click", function() {
+            const searchValue = searchInput.value.trim();
+            if (searchValue !== "") {
+                alert("Recherche en cours pour : " + searchValue);
+                // filtre
+            } else {
+                alert("Veuillez entrer un mot-clé.");
+            }
+        });
+    }
 });
-

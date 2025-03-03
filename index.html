@@ -1,96 +1,110 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-16">
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CESI - Plateforme de stages</title>
-    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <script src="script.js"></script>
-    <header>
-
-        <nav class="navbar">
-            <div class="logo">
-              <a href="index.html" >
-                <img src="/logo.png">
-            </div>
-            <div class="nav-links">
-                <a href="index.html" class="index-btn">Accueil</a>
-                <a href="#" class="recherche-btn">Recherche</a>
-                <a href="connexion.html" class="connexion-btn">Connexion</a>
-            </div>
-        </nav>
-    </header>
-
-    <div id="cookie-notification" class="cookie-notification">
-      <p>Ce site utilise des cookies pour améliorer votre expérience. En continuant à naviguer, vous acceptez leur utilisation.</p>
-      <button id="accept-cookies">J'accepte</button>
-      <button id="decline-cookies">Je refuse</button>
-      <a href="CGU.html" id="learn-more">En savoir plus</a>
-  </div>
-
-  <div id="cookie-policy" class="cookie-policy">
-      <p>Vous avez refusé les cookies. Certains éléments du site pourraient ne pas fonctionner correctement.</p>
-      <button id="validation">OK</button>
-      <a href="CGU.html" id="learn-more">En savoir plus</a>
-  </div>
-
-
-    <main>
-        <div class="container">
-            <section class="welcome-section">
-                <h1>Bienvenue sur la plateforme CESI dédiée à la recherche de stages ! 🎉</h1>
-                <p class="intro-text">Trouver un stage peut être un défi 🏆. CESI simplifie cette étape importante pour ses étudiants 👨‍🎓 en centralisant les offres de stages 💼 et les informations sur les entreprises 🏢.</p>
-            </section>
-
-            <section class="features">
-                <div class="feature-card">
-                    <h2>Plateforme intuitive 👆</h2>
-                    <p>Découvrez des opportunités adaptées à vos compétences ☀️ et réussissez votre projet professionnel.</p>
+    <div class="page-container">
+        <header>
+            <nav class="navbar">
+                <div class="logo">
+                    <a href="index.html">
+                        <img src="/logo.png" alt="Logo CESI">
+                    </a>
                 </div>
-                <div class="feature-card">
-                    <h2>Notre mission ? Votre réussite ! 🎯</h2>
-                    <p>Gagnez du temps ⏰ et concentrez-vous sur l'essentiel : trouver un stage qui correspond à vos ambitions 🚀.</p>
+                <div class="search-container">
+                    <input type="text" class="search-bar" placeholder="🔍 Rechercher...">
                 </div>
-            </section>
+                <div class="nav-links">
+                    <a href="index.html" class="index-btn">Accueil</a>
+                    <a href="recherche.html" class="recherche-btn">Recherche</a>
+                    <a href="connexion.html" class="connexion-btn">Connexion</a>
+                </div>
+            </nav>
+        </header>
 
-            <section class="latest-offers">
-                <h2>Dernières offres :</h2>
-                <div class="offers-grid">
-                    <div class="offer-card">
-                        <div class="company-logo">
-                          <img src="/logo-ent.png" alt="Logo de l'entreprise">
-                        </div>
-                        
-                        <section class="offer-details">
-                        <div>
-                            <a href="#"">
-                            <h3>Stage - Développeur Web</h3>
-                            <p class="company">TechCorp</p>
-                            <p class="location">Nancy (54)</p>
-                            <p class="date">Publié hier</p>
-                        </div>
-                        <div>
-                            <a href="#"">
-                                <h3>Stage - Ingénieur réseau</h3>
-                                <p class="company">Mcorp</p>
-                                <p class="location">Metz (57)</p>
-                                <p class="date">Publié il a 3j</p>
-                        </div>
-                    </section>
+        <div id="cookie-notification" class="cookie-notification">
+            <div class="cookie-content">
+                <p>Ce site utilise des cookies pour améliorer votre expérience. En continuant à naviguer, vous acceptez leur utilisation.</p>
+                <div class="cookie-buttons">
+                    <button id="accept-cookies">J'accepte</button>
+                    <button id="decline-cookies">Je refuse</button>
+                    <a href="CGU.html" id="learn-more">En savoir plus</a>
+                </div>
+            </div>
+        </div>
+
+        <div id="cookie-policy" class="cookie-policy">
+            <div class="cookie-content">
+                <p>Vous avez refusé les cookies. Certains éléments du site pourraient ne pas fonctionner correctement.</p>
+                <div class="cookie-buttons">
+                    <button id="validation">OK</button>
+                    <a href="CGU.html" id="learn-more">En savoir plus</a>
+                </div>
+            </div>
+        </div>
+
+        <main>
+            <div class="container">
+                <section class="welcome-section">
+                    <h1>Bienvenue sur la plateforme CESI dédiée à la recherche de stages ! 🎉</h1>
+                    <p class="intro-text">Trouver un stage peut être un défi 🏆. CESI simplifie cette étape importante pour ses étudiants 👨‍🎓 en centralisant les offres de stages 💼 et les informations sur les entreprises 🏢.</p>
+                </section>
+
+                <section class="features">
+                    <div class="feature-card">
+                        <h2>Plateforme intuitive 👆</h2>
+                        <p>Découvrez des opportunités adaptées à vos compétences ☀️ et réussissez votre projet professionnel.</p>
                     </div>
-                </div>
-            </section>
-        </div>
-    </main>
+                    <div class="feature-card">
+                        <h2>Notre mission ? Votre réussite ! 🎯</h2>
+                        <p>Gagnez du temps ⏰ et concentrez-vous sur l'essentiel : trouver un stage qui correspond à vos ambitions 🚀.</p>
+                    </div>
+                </section>
 
-    <footer>
-        <div class="footer-links">
-            <a href="#">Mentions légales</a>
-            <a href="#">Contact</a>
-            <a href="#">FAQ</a>
-        </div>
-    </footer>
+                <section class="latest-offers">
+                    <h2>Dernières offres :</h2>
+                    <div class="offers-grid">
+                        <div class="offer-card">
+                            <div class="company-logo">
+                                <img src="/logo-ent.png" alt="Logo de l'entreprise">
+                            </div>
+                            <div class="offer-details">
+                                <div class="offer-item">
+                                    <a href="#">
+                                        <h3>Stage - Développeur Web</h3>
+                                        <p class="company">TechCorp</p>
+                                        <p class="location">Nancy (54)</p>
+                                        <p class="date">Publié hier</p>
+                                    </a>
+                                </div>
+                                <div class="offer-item">
+                                    <a href="#">
+                                        <h3>Stage - Ingénieur réseau</h3>
+                                        <p class="company">Mcorp</p>
+                                        <p class="location">Metz (57)</p>
+                                        <p class="date">Publié il a 3j</p>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+
+        <footer>
+            <div class="footer-links">
+                <a href="#">Mentions légales</a>
+                <a href="#">Contact</a>
+                <a href="#">FAQ</a>
+            </div>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
 </body>
 </html>

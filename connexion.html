@@ -1,57 +1,76 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-16">
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CESI - Connexion</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <header>
-        <div class="logo">
-                <a href="index.html">
-                    <img src="/logo.png" alt="CESI Logo">
-                </a>
+    <div class="page-container">
+        <header>
+            <nav class="navbar">
+                <div class="logo">
+                    <a href="index.html">
+                        <img src="/logo.png" alt="Logo CESI">
+                    </a>
+                </div>
+                <div class="nav-links">
+                    <a href="index.html" class="index-btn">Accueil</a>
+                    <a href="recherche.html" class="recherche-btn">Recherche</a>
+                    <a href="connexion.html" class="connexion-btn">Connexion</a>
+                </div>
+            </nav>
+        </header>
+
+        <div id="cookie-notification" class="cookie-notification">
+            <div class="cookie-content">
+                <p>Ce site utilise des cookies pour améliorer votre expérience. En continuant à naviguer, vous acceptez leur utilisation.</p>
+                <div class="cookie-buttons">
+                    <button id="accept-cookies">J'accepte</button>
+                    <button id="decline-cookies">Je refuse</button>
+                    <a href="CGU.html" id="learn-more">En savoir plus</a>
+                </div>
             </div>
-        
-    </header>
-    <div id="cookie-notification" class="cookie-notification">
-        <p>Ce site utilise des cookies pour améliorer votre expérience. En continuant à naviguer, vous acceptez leur utilisation.</p>
-        <button id="accept-cookies">J'accepte</button>
-        <button id="decline-cookies">Je refuse</button>
-        <a href="CGU.html" id="learn-more">En savoir plus</a>
-    </div>
-  
-    <div id="cookie-policy" class="cookie-policy">
-        <p>Vous avez refusé les cookies. Certains éléments du site pourraient ne pas fonctionner correctement.</p>
-        <button id="validation">OK</button>
-        <a href="CGU.html" id="learn-more">En savoir plus</a>
-    </div>
-
-    <main>
-        <div class="login-container">
-            <form class="login-form">
-                <h2>Connexion</h2>
-                <label for="username">Nom d'utilisateur</label>
-                <input type="text" id="username" name="username" required>
-                
-                <label for="password">Mot de passe</label>
-                <input type="password" id="password" name="password" required>
-                
-                <a href="#" class="forgot-password">Mot de passe oublié ?</a>
-                
-                <button type="submit" class="btn-login">S’authentifier</button>
-            </form>
         </div>
-    </main>
 
-    <footer class="footer-co">
-        <div class="footer-links">
-            <a href="#">Mentions légales</a>
-            <a href="#">Contact</a>
-            <a href="#">FAQ</a>
+        <div id="cookie-policy" class="cookie-policy">
+            <div class="cookie-content">
+                <p>Vous avez refusé les cookies. Certains éléments du site pourraient ne pas fonctionner correctement.</p>
+                <div class="cookie-buttons">
+                    <button id="validation">OK</button>
+                    <a href="CGU.html" id="learn-more">En savoir plus</a>
+                </div>
+            </div>
         </div>
-    </footer>
+
+        <main>
+            <div class="container">
+                <div class="login-container">
+                    <form class="login-form">
+                        <h2>Connexion</h2>
+                        <label for="username">Nom d'utilisateur</label>
+                        <input type="text" id="username" name="username" required>
+                        
+                        <label for="password">Mot de passe</label>
+                        <input type="password" id="password" name="password" required>
+                        
+                        <a href="#" class="forgot-password">Mot de passe oublié ?</a>
+                        
+                        <button type="submit" class="btn-login">S'authentifier</button>
+                    </form>
+                </div>
+            </div>
+        </main>
+
+        <footer>
+            <div class="footer-links">
+                <a href="#">Mentions légales</a>
+                <a href="#">Contact</a>
+                <a href="#">FAQ</a>
+            </div>
+        </footer>
+    </div>
 
     <script src="script.js"></script>
 </body>

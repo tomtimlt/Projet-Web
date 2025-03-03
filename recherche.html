@@ -7,62 +7,102 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <header>
-        <nav>
-            <div class="logo">
-                <a href="index.html">
-                    <img src="/logo.png" alt="CESI Logo">
-                </a>
+    <div class="page-container">
+        <header>
+            <nav class="navbar">
+                <div class="logo">
+                    <a href="index.html">
+                        <img src="/logo.png" alt="Logo CESI">
+                    </a>
+                </div>
+                <div class="nav-links">
+                    <a href="index.html" class="index-btn">Accueil</a>
+                    <a href="recherche.html" class="recherche-btn">Recherche</a>
+                    <a href="connexion.html" class="connexion-btn">Connexion</a>
+                </div>
+            </nav>
+        </header>
+
+        <div id="cookie-notification" class="cookie-notification">
+            <div class="cookie-content">
+                <p>Ce site utilise des cookies pour améliorer votre expérience. En continuant à naviguer, vous acceptez leur utilisation.</p>
+                <div class="cookie-buttons">
+                    <button id="accept-cookies">J'accepte</button>
+                    <button id="decline-cookies">Je refuse</button>
+                    <a href="CGU.html" id="learn-more">En savoir plus</a>
+                </div>
             </div>
-            <div class="nav-links">
-                <a href="index.html" class="index-btn">Accueil</a>
-                <a href="recherche.html" class="recherche-btn">Recherche</a>
-                <a href="connexion.html" class="connexion-btn">Connexion</a>
+        </div>
+
+        <div id="cookie-policy" class="cookie-policy">
+            <div class="cookie-content">
+                <p>Vous avez refusé les cookies. Certains éléments du site pourraient ne pas fonctionner correctement.</p>
+                <div class="cookie-buttons">
+                    <button id="validation">OK</button>
+                    <a href="CGU.html" id="learn-more">En savoir plus</a>
+                </div>
             </div>
-        </nav>
-    </header>
-    <div id="cookie-notification" class="cookie-notification">
-        <p>Ce site utilise des cookies pour améliorer votre expérience. En continuant à naviguer, vous acceptez leur utilisation.</p>
-        <button id="accept-cookies">J'accepte</button>
-        <button id="decline-cookies">Je refuse</button>
-        <a href="CGU.html" id="learn-more">En savoir plus</a>
-    </div>
-  
-    <div id="cookie-policy" class="cookie-policy">
-        <p>Vous avez refusé les cookies. Certains éléments du site pourraient ne pas fonctionner correctement.</p>
-        <button id="validation">OK</button>
-        <a href="CGU.html" id="learn-more">En savoir plus</a>
+        </div>
+
+        <main>
+            <div class="container">
+                <section class="search-section">
+                    <div class="search-container">
+                        <input type="text" class="search-bar" placeholder="Rechercher...">
+                        <button class="search-btn">🔍</button>
+                    </div>
+
+                    <div class="filter-container">
+                        <select name="category" id="category">
+                            <option value="">Catégorie</option>
+                            <option value="dev">Développement</option>
+                            <option value="reseau">Réseau</option>
+                            <option value="securite">Sécurité</option>
+                            <option value="data">Data</option>
+                        </select>
+                        <select name="location" id="location">
+                            <option value="">Localisation</option>
+                            <option value="paris">Paris</option>
+                            <option value="lyon">Lyon</option>
+                            <option value="marseille">Marseille</option>
+                            <option value="nancy">Nancy</option>
+                            <option value="metz">Metz</option>
+                        </select>
+                        <select name="duration" id="duration">
+                            <option value="">Durée</option>
+                            <option value="1">1 mois</option>
+                            <option value="2">2 mois</option>
+                            <option value="3">3 mois</option>
+                            <option value="6">6 mois</option>
+                        </select>
+                    </div>
+                </section>
+
+                <section class="results-container">
+                    <!-- Les résultats de recherche apparaîtront ici -->
+                </section>
+
+                <div class="pagination">
+                    <a href="#">&larr; Précédent</a>
+                    <a href="#" class="active">1</a>
+                    <a href="#">2</a>
+                    <a href="#">3</a>
+                    <span>...</span>
+                    <a href="#">68</a>
+                    <a href="#">Suivant &rarr;</a>
+                </div>
+            </div>
+        </main>
+
+        <footer>
+            <div class="footer-links">
+                <a href="#">Mentions légales</a>
+                <a href="#">Contact</a>
+                <a href="#">FAQ</a>
+            </div>
+        </footer>
     </div>
 
-    <main>
-        <div class="search-container">
-            <input type="text" class="search-bar" placeholder="Rechercher...">
-            <button class="search-button">🔍</button>
-        </div>
-     
-        <div class="pagination">
-            <a href="#">&larr; Précédent</a>
-            <span>1</span>
-            <a href="#">2</a>
-            <a href="#">3</a>
-            <span>...</span>
-            <a href="#">68</a>
-            <a href="#">Suivant &rarr;</a>
-        </div>
-    </main>
-
-    <footer>
-        <div class="footer-links">
-            <a href="#">Mentions légales</a>
-            <a href="#">Contact</a>
-            <a href="#">FAQ</a>
-        </div>
-    </footer>
+    <script src="script.js"></script>
 </body>
 </html>
-
-
-
-
-
-
