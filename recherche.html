@@ -54,14 +54,14 @@
 
                     <div class="filter-container">
                         <select name="category" id="category">
-                            <option value="">Catégorie</option>
-                            <option value="dev">Développement</option>
-                            <option value="reseau">Réseau</option>
-                            <option value="securite">Sécurité</option>
-                            <option value="data">Data</option>
+                            <option value="" hidden>Compétences</option>
+                            <option value="dev">C++</option>
+                            <option value="reseau">HTML</option>
+                            <option value="securite">JavaScript</option>
+                            <option value="data">SQL</option>
                         </select>
                         <select name="location" id="location">
-                            <option value="">Localisation</option>
+                            <option value="" hidden>Localisation</option>
                             <option value="paris">Paris</option>
                             <option value="lyon">Lyon</option>
                             <option value="marseille">Marseille</option>
@@ -69,27 +69,87 @@
                             <option value="metz">Metz</option>
                         </select>
                         <select name="duration" id="duration">
-                            <option value="">Durée</option>
+                            <option value="" hidden>Durée</option>
                             <option value="1">1 mois</option>
                             <option value="2">2 mois</option>
                             <option value="3">3 mois</option>
                             <option value="6">6 mois</option>
                         </select>
+                        <button id="reset-filters" class="btn-reset">Réinitialiser les filtres</button>
                     </div>
                 </section>
 
                 <section class="results-container">
-                    <!-- Les résultats de recherche apparaîtront ici -->
+                    <div class="result-card" onclick="window.location.href='detail-offre1.html'">
+                        <div class="result-logo">
+                            <img src="/api/placeholder/40/40" alt="Logo Entreprise">
+                        </div>
+                        <div class="result-details">
+                            <h3>Développeur Web Full Stack</h3>
+                            <p><strong>Entreprise</strong>: TechInnovate Solutions</p>
+                            <p><strong>Localisation</strong>: Paris</p>
+                            <p><strong>Durée</strong>: 6 mois</p>
+                        </div>
+                    </div>
+                    <div class="result-card" onclick="window.location.href='detail-offre2.html'">
+                        <div class="result-logo">
+                            <img src="/api/placeholder/40/40" alt="Logo Entreprise">
+                        </div>
+                        <div class="result-details">
+                            <h3>Spécialiste Cybersécurité</h3>
+                            <p><strong>Entreprise</strong>: SecureNet Consulting</p>
+                            <p><strong>Localisation</strong>: Lyon</p>
+                            <p><strong>Durée</strong>: 3 mois</p>
+                        </div>
+                    </div>
+                    <div class="result-card" onclick="window.location.href='detail-offre3.html'">
+                        <div class="result-logo">
+                            <img src="/api/placeholder/40/40" alt="Logo Entreprise">
+                        </div>
+                        <div class="result-details">
+                            <h3>Ingénieur Data Science</h3>
+                            <p><strong>Entreprise</strong>: DataDream Analytics</p>
+                            <p><strong>Localisation</strong>: Marseille</p>
+                            <p><strong>Durée</strong>: 2 mois</p>
+                        </div>
+                    </div>
+                    <div class="result-card" onclick="window.location.href='detail-offre4.html'">
+                        <div class="result-logo">
+                            <img src="/api/placeholder/40/40" alt="Logo Entreprise">
+                        </div>
+                        <div class="result-details">
+                            <h3>Développeur Infrastructure Cloud</h3>
+                            <p><strong>Entreprise</strong>: CloudMaster Technologies</p>
+                            <p><strong>Localisation</strong>: Nancy</p>
+                            <p><strong>Durée</strong>: 1 mois</p>
+                        </div>
+                    </div>
+                    <div class="result-card" onclick="window.location.href='detail-offre5.html'">
+                        <div class="result-logo">
+                            <img src="/api/placeholder/40/40" alt="Logo Entreprise">
+                        </div>
+                        <div class="result-details">
+                            <h3>Développeur Mobile</h3>
+                            <p><strong>Entreprise</strong>: MobileTech Innovations</p>
+                            <p><strong>Localisation</strong>: Metz</p>
+                            <p><strong>Durée</strong>: 3 mois</p>
+                        </div>
+                    </div>
+                    <div class="result-card" onclick="window.location.href='detail-offre6.html'">
+                        <div class="result-logo">
+                            <img src="/api/placeholder/40/40" alt="Logo Entreprise">
+                        </div>
+                        <div class="result-details">
+                            <h3>Analyste Sécurité Réseau</h3>
+                            <p><strong>Entreprise</strong>: NetworkGuard Solutions</p>
+                            <p><strong>Localisation</strong>: Toulouse</p>
+                            <p><strong>Durée</strong>: 4 mois</p>
+                        </div>
+                    </div>
                 </section>
-
+                
                 <div class="pagination">
-                    <a href="#">&larr; Précédent</a>
-                    <a href="#" class="active">1</a>
-                    <a href="#">2</a>
-                    <a href="#">3</a>
-                    <span>...</span>
-                    <a href="#">68</a>
-                    <a href="#">Suivant &rarr;</a>
+                    <!-- Pagination will be dynamically generated by JavaScript -->
                 </div>
             </div>
         </main>
