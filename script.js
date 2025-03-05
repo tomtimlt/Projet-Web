@@ -11,7 +11,7 @@ document.addEventListener("DOMContentLoaded", function() {
     
     // Gestion des cookies
     if (localStorage.getItem("cookiesAccepted") === "true") {
-        cookieNotification.style.display = "none";
+        cookieNotification.style.display = "flex";
     } else {
         cookieNotification.style.display = "flex";
     }
