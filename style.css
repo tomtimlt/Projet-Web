@@ -71,6 +71,8 @@ header {
   max-width: 500px;
   display: flex;
   justify-content: center;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .nav-links {
@@ -168,39 +170,31 @@ header {
 .latest-offers {
   display: flex;
   flex-direction: column;
-}
-
-.latest-offers h2 {
-  margin-bottom: 2rem;
+  align-items: center;
+  margin-top: 20px;
 }
 
 .offers-grid {
   display: flex;
   flex-wrap: wrap;
-  gap: 1.5rem;
+  gap: 15px;
   justify-content: center;
+  padding: 20px;
 }
 
 .offer-card {
   background-color: var(--white);
   border-radius: 8px;
-  padding: 1.5rem;
-  display: flex;
-  gap: 1rem;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  transition: box-shadow 0.3s;
-  flex: 1;
-  min-width: 300px;
-  max-width: 900px;
+  padding: 15px;
+  width: 300px;
+  box-shadow: 0 2px 4px var(--shadow-color);
+  transition: box-shadow 0.3s, transform 0.3s;
+  cursor: pointer;
 }
 
 .offer-card:hover {
   box-shadow: 0 4px 6px var(--shadow-color);
-}
-
-.company-logo {
-  display: flex;
-  align-items: flex-start;
+  transform: translateY(-3px);
 }
 
 .company-logo img {
@@ -209,40 +203,15 @@ header {
   object-fit: contain;
 }
 
-.offer-details {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 2rem;
-  flex: 1;
-}
-
-.offer-item {
-  flex: 1;
-  min-width: 200px;
-}
-
-.offer-item a {
-  text-decoration: none;
-  color: inherit;
-  display: block;
-  height: 100%;
-  transition: transform 0.3s;
-}
-
-.offer-item a:hover {
-  transform: translateY(-3px);
-}
-
 .offer-details h3 {
-  font-size: 1.1rem;
-  margin-bottom: 0.5rem;
-  color: var(--secondary-color);
+  color: var(--primary-color);
+  font-size: 1rem;
+  margin-bottom: 5px;
 }
 
 .offer-details p {
   color: var(--gray-600);
   font-size: 0.9rem;
-  margin-bottom: 0.25rem;
 }
 
 /* Footer */
@@ -447,6 +416,13 @@ footer {
 }
 
 /* Recherche page styles */
+.ai-style-change-1 {
+  .search-container& {
+      margin-bottom: 15px;
+      gap: 10px;
+  }
+}
+
 .filter-container {
   display: flex;
   justify-content: center;
@@ -456,7 +432,7 @@ footer {
 }
 
 .filter-container select {
-  padding: 8px;
+  padding: 5px;
   border-radius: 5px;
   border: 1px solid var(--gray-300);
   font-size: 1rem;
@@ -519,6 +495,7 @@ footer {
   transition: background-color 0.3s, color 0.3s;
 }
 
+
 .pagination .active {
   background: var(--third-color);
   color: var(--primary-color);
@@ -535,6 +512,7 @@ footer {
   .search-container {
     margin: 1rem 0;
     max-width: 100%;
+
   }
   
   .nav-links {
@@ -555,3 +533,160 @@ footer {
     gap: 1.5rem;
   }
 }
+
+/* offres */
+
+.results-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 15px;
+  padding: 15px;
+}
+
+.result-card {
+  background-color: var(--white);
+  border-radius: 8px;
+  padding: 15px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.3s, transform 0.3s;
+  width: 100%;
+  max-width: 400px;
+  cursor: pointer;
+}
+
+.result-card:hover {
+  box-shadow: 0 4px 6px var(--shadow-color);
+  transform: translateY(-3px);
+}
+
+.result-logo {
+  display: flex;
+  align-items: center;
+}
+
+.result-logo img {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+  margin-right: 10px;
+}
+
+.result-details {
+  flex: 1;
+}
+
+.result-details h3 {
+  color: var(--primary-color);
+  font-size: 0.9rem;
+  margin-bottom: 5px;
+}
+
+.result-details p {
+  color: var(--gray-600);
+  font-size: 0.8rem;
+  margin-bottom: 3px;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 15px 0;
+  flex-wrap: wrap;
+}
+
+.pagination a, 
+.pagination span {
+  text-decoration: none;
+  padding: 5px 10px;
+  background: var(--gray-200);
+  border-radius: 3px;
+  font-weight: bold;
+  color: var(--secondary-color);
+  transition: background-color 0.3s, color 0.3s;
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+
+.pagination a:hover {
+  background: var(--primary-color);
+  color: var(--third-color);
+}
+
+.pagination .active {
+  background: var(--third-color);
+  color: var(--primary-color);
+}
+
+/* bouton reset */
+
+.btn-reset {
+  background-color: var(--primary-color);
+  color: var(--third-color);
+  border: none;
+  padding: 10px 15px;
+  border-radius: 50px;
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.3s, color 0.3s, transform 0.3s;
+}
+
+.btn-reset:hover {
+  background-color: var(--third-color);
+  color: var(--primary-color);
+  transform: scale(1.05);
+}
+
+/* bouton retour recherhce */
+
+.btn-back {
+  display: inline-block;
+  margin-top: 20px;
+  padding: 10px 15px;
+  background-color: --gray-300(--primary-color);
+  color: var(--third-color);
+  text-decoration: none;
+  border-radius: 50px;
+  font-weight: bold;
+  transition: background-color 0.3s, color 0.3s, transform 0.3s;
+  text-align: center;
+}
+
+.btn-back:hover {
+  background-color: var(--third-color);
+  color: var(--primary-color);
+  transform: scale(1.05);
+}
+
+/* bouton apply */
+.btn-apply-small {
+  background-color: var(--primary-color);
+  color: var(--third-color);
+  border: none;
+  padding: 10px 15px; /* Moins de padding horizontal */
+  border-radius: 5555px; /* Arrondi esthétique */
+  font-size: 0.85rem; /* Texte plus petit */
+  font-weight: bold;
+  cursor: pointer;
+  width: auto; /* Ajuste la largeur au texte */
+  max-width: 200px; /* Empêche un bouton trop petit */
+  text-align: center;
+  transition: background-color 0.3s, color 0.3s, transform 0.3s;
+  margin-right: auto;
+}
+
+.btn-apply-small:hover {
+  background-color: var(--third-color);
+  color: var(--primary-color);
+  transform: scale(1.05);
+}
+
+/* controle fichier */
+
+
