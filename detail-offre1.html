@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Détail de l'Offre - Développeur Front-End</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="page-container">
+        <header>
+            <nav class="navbar">
+                <div class="logo">
+                    <a href="index.html">
+                        <img src="/logo.png" alt="Logo CESI">
+                    </a>
+                </div>
+                <div class="nav-links">
+                    <a href="index.html">Accueil</a>
+                    <a href="recherche.html">Recherche</a>
+                    <a href="connexion.html">Connexion</a>
+                </div>
+            </nav>
+        </header>
+
+        <main>
+            <div class="container">
+                <section class="offer-detail">
+                    <h1>Développeur Front-End </h1>
+                    <p class="company"><strong>Entreprise :</strong> TechInnovate</p>
+                    <p class="location"><strong>Localisation :</strong> Paris</p>
+                    <p class="duration"><strong>Durée :</strong> 6 mois</p>
+                    
+                    <div class="offer-description">
+                        <h2>Description du poste</h2>
+                        <p>En tant que Développeur Front-End chez TechInnovate, vous serez responsable de la conception et de l'implémentation d'interfaces utilisateur dynamiques et réactives. Vous travaillerez en collaboration avec les équipes UX/UI et Back-End pour optimiser l'expérience utilisateur.</p>
+                    </div>
+                    
+                    <form action="upload.php" method="post" enctype="multipart/form-data" style="display: flex; flex-direction: column; gap: 10px;">
+
+    <label for="cv-upload">Téléverser votre CV :</label>
+    <input type="file" id="cv-upload" name="cv" accept=".pdf,.doc,.docx" required>
+    <button type="submit" class="btn-apply-small">Postuler</button>
+
+</form>
+                    <a href="recherche.html" class="btn-back" role="button">&#8592; Retour à la recherche</a>
+                </section>
+            </div>
+        </main>
+
+        <footer>
+            <div class="footer-links">
+                <a href="#">Mentions légales</a>
+                <a href="#">Contact</a>
+                <a href="#">FAQ</a>
+            </div>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
