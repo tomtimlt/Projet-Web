@@ -1,93 +1,134 @@
-document.addEventListener("DOMContentLoaded", function() {
-    
-    // Variables en JS
-    const cookieNotification = document.getElementById("cookie-notification");
-    const acceptButton = document.getElementById("accept-cookies");
-    const declineButton = document.getElementById("decline-cookies");
-    const cookiePolicy = document.getElementById("cookie-policy");
-    const validateButton = document.getElementById("validation");
-    const rechercheBtn = document.querySelector(".recherche-btn");
-    const searchContainer = document.querySelector(".search-container");
-    
-    // Gestion des cookies
-    if (localStorage.getItem("cookiesAccepted") === "true") {
-        cookieNotification.style.display = "flex";
-    } else {
-        cookieNotification.style.display = "flex";
+document.addEventListener("DOMContentLoaded", function () {
+    const offersPerPage = 6; // Nombre d'offres par page
+    const resultsContainer = document.querySelector(".results-container");
+    const paginationContainer = document.querySelector(".pagination");
+    const categoryFilter = document.getElementById("category");
+    const locationFilter = document.getElementById("location");
+    const durationFilter = document.getElementById("duration");
+    const resetButton = document.getElementById("reset-filters"); // Bouton réinitialisation
+    let currentPage = 1; // Page actuelle
+
+
+    const offers = [
+        { title: "Développeur Front-End", company: "TechInnovate", location: "Paris", duration: "6", category: "dev", url: "detail-offre1.html" },
+        { title: "Développeur Back-End", company: "CodeSolutions", location: "Lyon", duration: "3", category: "dev", url: "detail-offre2.html" },
+        { title: "Spécialiste Cybersécurité", company: "SecureNet", location: "Marseille", duration: "2", category: "securite", url: "detail-offre3.html" },
+        { title: "Ingénieur Cloud & Réseau", company: "CloudMaster", location: "Nancy", duration: "1", category: "reseau", url: "detail-offre4.html" },
+        { title: "Développeur Mobile iOS", company: "MobileTech", location: "Metz", duration: "3", category: "dev", url: "detail-offre5.html" },
+        { title: "Analyste Sécurité Réseau", company: "CyberSafe", location: "Toulouse", duration: "4", category: "securite", url: "detail-offre6.html" },
+        { title: "Data Scientist", company: "DataSolutions", location: "Paris", duration: "6", category: "data", url: "detail-offre7.html" },
+        { title: "Architecte Réseau", company: "NetWorkExperts", location: "Bordeaux", duration: "5", category: "reseau", url: "detail-offre8.html" },
+    ];
+
+    let filteredOffers = [...offers]; // Toutes les offres au début
+
+    function filterOffers() {
+        const selectedCategory = categoryFilter.value;
+        const selectedLocation = locationFilter.value;
+        const selectedDuration = durationFilter.value;
+
+        filteredOffers = offers.filter(offer => {
+            return (
+                (selectedCategory === "" || offer.category === selectedCategory) &&
+                (selectedLocation === "" || offer.location.toLowerCase() === selectedLocation.toLowerCase()) &&
+                (selectedDuration === "" || offer.duration === selectedDuration)
+            );
+        });
+
+        currentPage = 1; // Retour à la première page après filtrage
+        updatePagination();
     }
 
-    acceptButton.addEventListener("click", function() {
-        localStorage.setItem("cookiesAccepted", "true");
-        cookieNotification.style.display = "none";
-    });
+    function resetFilters() {
+        categoryFilter.selectedIndex = 0;
+        locationFilter.selectedIndex = 0;
+        durationFilter.selectedIndex = 0;
+        filterOffers();
+    }
 
-    // Correction: searchButton n'existait pas, utilisation de rechercheBtn à la place
-    rechercheBtn.addEventListener("click", function() {
-        searchContainer.style.display = "flex";
-    });
+    function renderOffers() {
+        resultsContainer.innerHTML = ""; // Supprime les anciennes offres
+        const start = (currentPage - 1) * offersPerPage;
+        const end = start + offersPerPage;
+        const paginatedOffers = filteredOffers.slice(start, end);
 
-    declineButton.addEventListener("click", function() {
-        cookieNotification.style.display = "none";
-        cookiePolicy.style.display = "flex";
-    });
-
-    validateButton.addEventListener("click", function() {
-        cookiePolicy.style.display = "none";
-    });
-
-    // Navigation
-    const connexionBtn = document.querySelector(".connexion-btn");
-    if (connexionBtn) {
-        connexionBtn.addEventListener('click', function(e) {
-            e.preventDefault();
-            window.location.href = 'connexion.html';
+        paginatedOffers.forEach(offer => {
+            const offerCard = document.createElement("div");
+            offerCard.classList.add("result-card");
+            offerCard.onclick = () => window.location.href = offer.url;
+            offerCard.innerHTML = `
+                <div class="result-logo">
+                    <img src="/api/placeholder/40/40" alt="Logo Entreprise">
+                </div>
+                <div class="result-details">
+                    <h3>${offer.title}</h3>
+                    <p><strong>Entreprise</strong>: ${offer.company}</p>
+                    <p><strong>Localisation</strong>: ${offer.location}</p>
+                    <p><strong>Durée</strong>: ${offer.duration} mois</p>
+                </div>
+            `;
+            resultsContainer.appendChild(offerCard);
         });
     }
 
-    const indexBtn = document.querySelector(".index-btn");
-    if (indexBtn) {
-        indexBtn.addEventListener('click', function(e) {
-            e.preventDefault();
-            window.location.href = 'index.html';
-        });
-    }
+    function createPagination() {
+        paginationContainer.innerHTML = ""; // Vider l'ancienne pagination
+        const totalPages = Math.ceil(filteredOffers.length / offersPerPage);
 
-    const rechercheButton = document.querySelector(".recherche-btn");
-    if (rechercheButton) {
-        rechercheButton.addEventListener('click', function(e) {
-            e.preventDefault();
-            window.location.href = 'recherche.html';
-        });
-    }
+        if (totalPages > 1) {
+            const prevButton = document.createElement("a");
+            prevButton.href = "#";
+            prevButton.innerHTML = "&larr; Précédent";
+            prevButton.classList.add("prev-btn");
+            prevButton.addEventListener("click", function(e) {
+                e.preventDefault();
+                if (currentPage > 1) {
+                    currentPage--;
+                    updatePagination();
+                }
+            });
+            paginationContainer.appendChild(prevButton);
 
-    // Gestion du formulaire de connexion (si présent sur la page)
-    const loginForm = document.querySelector(".login-form");
-    if (loginForm) {
-        loginForm.addEventListener("submit", function(event) {
-            event.preventDefault();
-            const username = document.getElementById("username").value;
-            const password = document.getElementById("password").value;
-            if (username && password) {
-                alert("Connexion réussie !");
-            } else {
-                alert("Veuillez remplir tous les champs.");
+            for (let i = 1; i <= totalPages; i++) {
+                const pageLink = document.createElement("a");
+                pageLink.href = "#";
+                pageLink.textContent = i;
+                pageLink.classList.toggle("active", i === currentPage);
+
+                pageLink.addEventListener("click", function(e) {
+                    e.preventDefault();
+                    currentPage = i;
+                    updatePagination();
+                });
+
+                paginationContainer.appendChild(pageLink);
             }
-        });
+
+            const nextButton = document.createElement("a");
+            nextButton.href = "#";
+            nextButton.innerHTML = "Suivant &rarr;";
+            nextButton.classList.add("next-btn");
+            nextButton.addEventListener("click", function(e) {
+                e.preventDefault();
+                if (currentPage < totalPages) {
+                    currentPage++;
+                    updatePagination();
+                }
+            });
+            paginationContainer.appendChild(nextButton);
+        }
     }
 
-    // Gestion de la barre de recherche
-    const searchBtn = document.querySelector(".search-btn");
-    const searchInput = document.querySelector(".search-bar");
-
-    if (searchBtn && searchInput) {
-        searchBtn.addEventListener("click", function() {
-            const searchValue = searchInput.value.trim();
-            if (searchValue !== "") {
-                alert("Recherche en cours pour : " + searchValue);
-                // filtre
-            } else {
-                alert("Veuillez entrer un mot-clé.");
-            }
-        });
+    function updatePagination() {
+        renderOffers();
+        createPagination();
     }
+
+    // Événements pour les filtres et réinitialisation
+    categoryFilter.addEventListener("change", filterOffers);
+    locationFilter.addEventListener("change", filterOffers);
+    durationFilter.addEventListener("change", filterOffers);
+    resetButton.addEventListener("click", resetFilters);
+
+    updatePagination(); // Charge la pagination au démarrage
 });
