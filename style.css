@@ -26,6 +26,19 @@ body {
   color: var(--secondary-color);
 }
 
+#video-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  object-fit: cover;
+  z-index: -1;
+  opacity: 0.1;
+  
+}
+
+
 .page-container {
   min-height: 100vh;
   display: flex;
@@ -80,6 +93,7 @@ header {
   margin-right: auto;
   background: white;
   border-radius: 1rem;
+  
   background: linear-gradient(45deg, #c5c5c5 0%, #ffffff 100%);
   box-shadow: 20px 20px 20px #d8d8d8, -10px -10px 20px #f8f8f8;
   padding: 0.3rem;
@@ -91,6 +105,7 @@ header {
   box-shadow: inset 13px 13px 10px #dcdcdc,
               inset -13px -13px 10px #f4f4f4;
   width: 100%;
+  
   flex-basis: 75%;
   padding: 1rem;
   border: none;
@@ -124,7 +139,7 @@ header {
 }
 
 .search-container path {
-  fill: white;
+  fill: black;
 }
 
 .search__icon {
@@ -139,20 +154,6 @@ header {
   gap: 2rem;
 }
 
-.nav-links a {
-  text-decoration: none;
-  color: var(--secondary-color);
-  font-weight: 500;
-  border-radius: 50px;
-  padding: 0.5rem 1rem;
-  transition: transform 0.3s, color 0.3s, background-color 0.3s;
-}
-
-.nav-links a:hover {
-  color: var(--primary-color);
-  background-color: var(--third-color);
-  transform: scale(1.05);
-}
 
 /*
 .recherche-btn, index-btn {
@@ -191,7 +192,7 @@ header {
 }
 
 /*
-.connexion-btn {
+.profil-btn {
   background-color: var(--primary-color);
   color: var(--white);
   border: none;
@@ -202,15 +203,12 @@ header {
   transition: transform 0.3s, color 0.3s, background-color 0.3s;
 }
 
-.connexion-btn:hover {
+.profil-btn:hover {
   background-color: var(--third-color);
   color: var(--primary-color);
   transform: scale(1.05);
 }*/
-.connexion-btn, 
-.recherche-btn, 
-.index-btn,
-.btn-reset {
+.btn-style {
   background-color: #ffe031;
   border-radius: 100px;
   box-shadow: rgba(255, 224, 49, .2) 0 -25px 18px -14px inset,rgba(255, 224, 49, .15) 0 1px 2px,rgba(255, 224, 49, .15) 0 2px 4px,rgba(255, 224, 49, .15) 0 4px 8px,rgba(255, 224, 49, .15) 0 8px 16px,rgba(255, 224, 49, .15) 0 16px 32px;
@@ -222,6 +220,7 @@ header {
   text-align: center;
   text-decoration: none;
   transition: all 250ms;
+  width: max-content;
   border: 0;
   font-size: 16px;
   user-select: none;
@@ -229,10 +228,7 @@ header {
   touch-action: manipulation;
 }
 
-.connexion-btn:hover,
-.recherche-btn:hover,
-.index-btn:hover,
-.btn-reset:hover {
+.btn-style:hover{
   box-shadow: rgba(255, 224, 49, .35) 0 -25px 18px -14px inset,rgba(255, 224, 49, .25) 0 1px 2px,rgba(255, 224, 49, .25) 0 2px 4px,rgba(255, 224, 49, .25) 0 4px 8px,rgba(255, 224, 49, .25) 0 8px 16px,rgba(255, 224, 49, .25) 0 16px 32px;
   transform: scale(1.05) rotate(-1deg);
   background-color: #000000;
@@ -240,7 +236,7 @@ header {
 }
 /*connexion bouton*/
 /*
-.connexion-btn, 
+.profil-btn, 
 .recherche-btn, 
 .index-btn  {
   background: var(--primary-color);
@@ -249,7 +245,7 @@ header {
   border-radius: 50px;
   color: var(--third-color);
 }
-.connexion-btn:after,
+.profil-btn:after,
 .recherche-btn:after,
 .index-btn:after {
   position: absolute;
@@ -268,19 +264,19 @@ header {
   transition: all 0.3s ease;
   border-radius: 50px;
 }
-.connexion-btn:hover,
+.profil-btn:hover,
 .recherche-btn:hover,
 .index-btn:hover {
   color: var(--primary-color);
   border-radius: 50px;
 }
-.connexion-btn:hover:after,
+.profil-btn:hover:after,
 .recherche-btn:hover:after,
 .index-btn:hover:after {
   left: 0;
   width: 100%;
 }
-.connexion-btn:active,
+.profil-btn:active,
 .recherche-btn:active,
 .index-btn:active {
   top: 2px;
@@ -785,7 +781,9 @@ footer {
 @media (max-width: 768px) {
 
   
-  
+  #video-background {
+    display: none;
+  }
   
   .navbar {
     flex-direction: column;
@@ -947,30 +945,6 @@ footer {
   color: var(--primary-color);
   transform: scale(1.05);
 }
-
-/* bouton apply */
-.btn-apply-small {
-  background-color: var(--primary-color);
-  color: var(--third-color);
-  border: none;
-  padding: 10px 15px; /* Moins de padding horizontal */
-  border-radius: 5555px; /* Arrondi esthétique */
-  font-size: 0.85rem; /* Texte plus petit */
-  font-weight: bold;
-  cursor: pointer;
-  width: auto; /* Ajuste la largeur au texte */
-  max-width: 200px; /* Empêche un bouton trop petit */
-  text-align: center;
-  transition: background-color 0.3s, color 0.3s, transform 0.3s;
-  margin-right: auto;
-}
-
-.btn-apply-small:hover {
-  background-color: var(--third-color);
-  color: var(--primary-color);
-  transform: scale(1.05);
-}
-
 /* controle fichier */
 
 
