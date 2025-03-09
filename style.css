@@ -107,7 +107,7 @@ header {
 
 .search-container button {
   flex-basis: 25%;
-  padding: 1rem;
+  padding: 0.2rem;
   background: linear-gradient(135deg, #f4eac0 0%, #ffe031 100%);
   font-weight: 900;
   letter-spacing: 0.3rem;
