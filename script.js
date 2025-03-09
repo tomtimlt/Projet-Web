@@ -58,7 +58,7 @@ document.addEventListener("DOMContentLoaded", function () {
             offerCard.onclick = () => window.location.href = offer.url;
             offerCard.innerHTML = `
                 <div class="result-logo">
-                    <img src="/api/placeholder/40/40" alt="Logo Entreprise">
+                    <img src="logo-ent.png" alt="Logo Entreprise">
                 </div>
                 <div class="result-details">
                     <h3>${offer.title}</h3>
