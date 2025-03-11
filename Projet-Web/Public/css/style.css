@@ -1,0 +1,58 @@
+/* Style de base pour l'application */
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+main {
+    flex: 1;
+}
+
+/* Styles pour les formulaires */
+.invalid-feedback {
+    display: block;
+}
+
+/* Style pour les alertes et notifications */
+.alert {
+    margin-bottom: 1.5rem;
+}
+
+/* Style pour les tableaux */
+.table-responsive {
+    margin-bottom: 1.5rem;
+}
+
+/* Style pour les cartes */
+.card {
+    margin-bottom: 1.5rem;
+}
+
+.card-header {
+    font-weight: bold;
+}
+
+/* Style pour la navbar */
+.navbar {
+    margin-bottom: 1.5rem;
+}
+
+/* Style pour le pied de page */
+footer {
+    padding: 1rem 0;
+    margin-top: 2rem;
+}
+
+/* Styles pour les boutons d'action dans les tableaux */
+.btn-action {
+    margin-right: 0.25rem;
+}
+
+/* Styles responsifs pour le contenu principal */
+@media (max-width: 768px) {
+    .container {
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+}
