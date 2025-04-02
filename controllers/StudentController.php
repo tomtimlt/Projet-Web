@@ -3,300 +3,234 @@ namespace Controllers;
 
 use Models\Student;
 use Models\Auth;
-use Utils\Flash;
-use Utils\Validator;
 
 class StudentController
 {
-    private $student;
+    private $studentModel;
     private $auth;
     
     public function __construct()
     {
-        $this->student = new Student();
+        $this->studentModel = new Student();
         $this->auth = Auth::getInstance();
         
-        // Vérifier si l'utilisateur est connecté
-        if (!$this->auth->isLoggedIn()) {
-            Flash::setFlash('error', 'Vous devez être connecté pour accéder à cette page.');
-            header('Location: index.php?page=home');
-            exit;
+        // Vérifier si l'utilisateur est admin ou pilote pour toutes les méthodes de ce contrôleur
+        if (!$this->auth->hasRole(['admin', 'pilote'])) {
+            $this->redirectToUnauthorized();
         }
     }
     
     /**
-     * Affiche la liste des étudiants
+     * Affiche la liste des étudiants avec recherche et pagination
      */
     public function index()
     {
-        // Vérifier les permissions (Admin ou Pilote uniquement)
-        if (!$this->auth->hasRole(['admin', 'pilote'])) {
-            Flash::setFlash('error', 'Vous n\'avez pas les permissions nécessaires pour accéder à cette page.');
-            header('Location: index.php?page=home');
-            exit;
+        // Récupérer les paramètres de recherche et pagination
+        $search = $_GET['search'] ?? '';
+        $page = isset($_GET['page_num']) ? max(1, (int)$_GET['page_num']) : 1;
+        $perPage = 10;
+        $offset = ($page - 1) * $perPage;
+        
+        // Filtres de recherche
+        $filters = [];
+        if (!empty($search)) {
+            $filters['search'] = $search;
         }
         
-        // Récupérer les filtres de recherche
-        $filters = [];
-        if (isset($_GET['firstname'])) $filters['firstname'] = $_GET['firstname'];
-        if (isset($_GET['lastname'])) $filters['lastname'] = $_GET['lastname'];
-        if (isset($_GET['email'])) $filters['email'] = $_GET['email'];
+        // Récupérer les étudiants et leur nombre total
+        $students = $this->studentModel->getAll($filters, $perPage, $offset);
+        $totalStudents = $this->studentModel->countAll($filters);
         
-        // Pagination
-        $page = isset($_GET['page_num']) ? max(1, intval($_GET['page_num'])) : 1;
-        $limit = 10;
-        $offset = ($page - 1) * $limit;
+        // Calculer le nombre total de pages
+        $totalPages = ceil($totalStudents / $perPage);
         
-        // Récupérer les étudiants
-        $students = $this->student->getAll($filters, $limit, $offset);
+        // Afficher la vue
+        $pageTitle = 'Gestion des étudiants';
         
-        // Charger la vue
         require_once 'Views/Student/index.php';
     }
     
     /**
-     * Affiche le formulaire pour créer un étudiant
+     * Affiche le formulaire de création d'un étudiant
      */
     public function create()
     {
-        // Vérifier les permissions (Admin ou Pilote uniquement)
-        if (!$this->auth->hasRole(['admin', 'pilote'])) {
-            Flash::setFlash('error', 'Vous n\'avez pas les permissions nécessaires pour accéder à cette page.');
-            header('Location: index.php?page=home');
-            exit;
-        }
+        // Initialiser les données et les erreurs
+        $student = [
+            'firstname' => '',
+            'lastname' => '',
+            'email' => '',
+            'is_active' => 1
+        ];
+        $errors = [];
         
-        // Charger la vue
+        // Afficher la vue
+        $pageTitle = 'Créer un compte étudiant';
+        
         require_once 'Views/Student/form.php';
     }
     
     /**
-     * Traite le formulaire de création d'étudiant
+     * Traite la création d'un étudiant
      */
     public function store()
     {
-        // Vérifier les permissions (Admin ou Pilote uniquement)
-        if (!$this->auth->hasRole(['admin', 'pilote'])) {
-            Flash::setFlash('error', 'Vous n\'avez pas les permissions nécessaires pour accéder à cette page.');
-            header('Location: index.php?page=home');
-            exit;
-        }
-        
-        // Vérifier la méthode de requête
+        // Vérifier si la requête est en POST
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-            Flash::setFlash('error', 'Méthode non autorisée.');
             header('Location: index.php?page=students');
             exit;
         }
         
-        // Récupérer et valider les données
-        $data = [
-            'firstname' => $_POST['firstname'] ?? '',
-            'lastname' => $_POST['lastname'] ?? '',
-            'email' => $_POST['email'] ?? '',
-            'password' => $_POST['password'] ?? ''
+        // Récupérer et nettoyer les données
+        $student = [
+            'firstname' => trim($_POST['firstname'] ?? ''),
+            'lastname' => trim($_POST['lastname'] ?? ''),
+            'email' => trim($_POST['email'] ?? ''),
+            'password' => $_POST['password'] ?? '',
+            'password_confirm' => $_POST['password_confirm'] ?? '',
+            'is_active' => isset($_POST['is_active']) ? 1 : 0
         ];
         
-        // Validation côté serveur
-        $validator = new Validator();
-        $validator->validate($data['firstname'], 'Prénom', 'required|alpha|min:2|max:50');
-        $validator->validate($data['lastname'], 'Nom', 'required|alpha|min:2|max:50');
-        $validator->validate($data['email'], 'Email', 'required|email|max:100');
-        $validator->validate($data['password'], 'Mot de passe', 'required|min:8|max:255');
+        // Valider les données
+        $errors = $this->validateStudentData($student, true);
         
-        if (!$validator->isValid()) {
-            Flash::setFlash('error', $validator->getErrors()[0]);
-            header('Location: index.php?page=create-student');
-            exit;
+        if (empty($errors)) {
+            // Créer l'étudiant
+            $result = $this->studentModel->create($student);
+            
+            if ($result) {
+                // Rediriger avec un message de succès
+                $_SESSION['flash'] = [
+                    'type' => 'success',
+                    'message' => 'Le compte étudiant a été créé avec succès.'
+                ];
+                header('Location: index.php?page=students');
+                exit;
+            } else {
+                $errors['general'] = "Une erreur est survenue lors de la création du compte. L'adresse email est peut-être déjà utilisée.";
+            }
         }
         
-        // Créer l'étudiant
-        $result = $this->student->create($data);
-        
-        if ($result) {
-            Flash::setFlash('success', 'L\'étudiant a été créé avec succès.');
-            header('Location: index.php?page=students');
-        } else {
-            Flash::setFlash('error', 'Une erreur est survenue lors de la création de l\'étudiant.');
-            header('Location: index.php?page=create-student');
-        }
-        exit;
-    }
-    
-    /**
-     * Affiche les détails d'un étudiant
-     */
-    public function show()
-    {
-        // Vérifier les permissions (Admin ou Pilote uniquement)
-        if (!$this->auth->hasRole(['admin', 'pilote'])) {
-            Flash::setFlash('error', 'Vous n\'avez pas les permissions nécessaires pour accéder à cette page.');
-            header('Location: index.php?page=home');
-            exit;
-        }
-        
-        // Récupérer l'ID de l'étudiant
-        $id = isset($_GET['id']) ? intval($_GET['id']) : 0;
-        
-        if ($id <= 0) {
-            Flash::setFlash('error', 'ID d\'étudiant invalide.');
-            header('Location: index.php?page=students');
-            exit;
-        }
-        
-        // Récupérer l'étudiant
-        $student = $this->student->getById($id);
-        
-        if (!$student) {
-            Flash::setFlash('error', 'Étudiant non trouvé.');
-            header('Location: index.php?page=students');
-            exit;
-        }
-        
-        // Récupérer les statistiques
-        $stats = $this->student->getStatistics($id);
-        
-        // Charger la vue
-        require_once 'Views/Student/show.php';
-    }
-    
-    /**
-     * Affiche le formulaire pour modifier un étudiant
-     */
-    public function edit()
-    {
-        // Vérifier les permissions (Admin ou Pilote uniquement)
-        if (!$this->auth->hasRole(['admin', 'pilote'])) {
-            Flash::setFlash('error', 'Vous n\'avez pas les permissions nécessaires pour accéder à cette page.');
-            header('Location: index.php?page=home');
-            exit;
-        }
-        
-        // Récupérer l'ID de l'étudiant
-        $id = isset($_GET['id']) ? intval($_GET['id']) : 0;
-        
-        if ($id <= 0) {
-            Flash::setFlash('error', 'ID d\'étudiant invalide.');
-            header('Location: index.php?page=students');
-            exit;
-        }
-        
-        // Récupérer l'étudiant
-        $student = $this->student->getById($id);
-        
-        if (!$student) {
-            Flash::setFlash('error', 'Étudiant non trouvé.');
-            header('Location: index.php?page=students');
-            exit;
-        }
-        
-        // Définir le mode (édition)
-        $isEditMode = true;
-        
-        // Charger la vue
+        // En cas d'erreur, afficher le formulaire à nouveau
+        $pageTitle = 'Créer un compte étudiant';
         require_once 'Views/Student/form.php';
     }
     
     /**
-     * Traite le formulaire de modification d'étudiant
+     * Affiche le formulaire de modification d'un étudiant
      */
-    public function update()
+    public function edit()
     {
-        // Vérifier les permissions (Admin ou Pilote uniquement)
-        if (!$this->auth->hasRole(['admin', 'pilote'])) {
-            Flash::setFlash('error', 'Vous n\'avez pas les permissions nécessaires pour accéder à cette page.');
-            header('Location: index.php?page=home');
-            exit;
-        }
-        
-        // Vérifier la méthode de requête
-        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-            Flash::setFlash('error', 'Méthode non autorisée.');
-            header('Location: index.php?page=students');
-            exit;
-        }
-        
         // Récupérer l'ID de l'étudiant
-        $id = isset($_POST['id']) ? intval($_POST['id']) : 0;
+        $id = $_GET['id'] ?? 0;
         
-        if ($id <= 0) {
-            Flash::setFlash('error', 'ID d\'étudiant invalide.');
+        // Récupérer les données de l'étudiant
+        $student = $this->studentModel->getById($id);
+        
+        if (!$student) {
+            $_SESSION['flash'] = [
+                'type' => 'danger',
+                'message' => "L'étudiant demandé n'existe pas."
+            ];
             header('Location: index.php?page=students');
             exit;
         }
         
-        // Récupérer et valider les données
-        $data = [
-            'firstname' => $_POST['firstname'] ?? '',
-            'lastname' => $_POST['lastname'] ?? '',
-            'email' => $_POST['email'] ?? '',
-            'password' => $_POST['password'] ?? '' // Optionnel pour la mise à jour
-        ];
+        // Initialiser les erreurs
+        $errors = [];
         
-        // Validation côté serveur
-        $validator = new Validator();
-        $validator->validate($data['firstname'], 'Prénom', 'required|alpha|min:2|max:50');
-        $validator->validate($data['lastname'], 'Nom', 'required|alpha|min:2|max:50');
-        $validator->validate($data['email'], 'Email', 'required|email|max:100');
-        
-        // Valider le mot de passe uniquement s'il est fourni
-        if (!empty($data['password'])) {
-            $validator->validate($data['password'], 'Mot de passe', 'min:8|max:255');
-        } else {
-            // Si le mot de passe est vide, le supprimer pour éviter de l'enregistrer comme vide
-            unset($data['password']);
-        }
-        
-        if (!$validator->isValid()) {
-            Flash::setFlash('error', $validator->getErrors()[0]);
-            header('Location: index.php?page=edit-student&id=' . $id);
-            exit;
-        }
-        
-        // Mettre à jour l'étudiant
-        $result = $this->student->update($id, $data);
-        
-        if ($result) {
-            Flash::setFlash('success', 'L\'étudiant a été mis à jour avec succès.');
-            header('Location: index.php?page=show-student&id=' . $id);
-        } else {
-            Flash::setFlash('error', 'Une erreur est survenue lors de la mise à jour de l\'étudiant.');
-            header('Location: index.php?page=edit-student&id=' . $id);
-        }
-        exit;
+        // Afficher la vue
+        $pageTitle = 'Modifier un compte étudiant';
+        require_once 'Views/Student/form.php';
     }
     
     /**
-     * Affiche la page de confirmation de suppression
+     * Traite la modification d'un étudiant
      */
-    public function delete()
+    public function update()
     {
-        // Vérifier les permissions (Admin uniquement)
-        if (!$this->auth->hasRole(['admin'])) {
-            Flash::setFlash('error', 'Vous n\'avez pas les permissions nécessaires pour accéder à cette page.');
-            header('Location: index.php?page=home');
+        // Vérifier si la requête est en POST
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            header('Location: index.php?page=students');
             exit;
         }
         
         // Récupérer l'ID de l'étudiant
-        $id = isset($_GET['id']) ? intval($_GET['id']) : 0;
+        $id = $_POST['id'] ?? 0;
         
-        if ($id <= 0) {
-            Flash::setFlash('error', 'ID d\'étudiant invalide.');
+        // Vérifier si l'étudiant existe
+        $existingStudent = $this->studentModel->getById($id);
+        
+        if (!$existingStudent) {
+            $_SESSION['flash'] = [
+                'type' => 'danger',
+                'message' => "L'étudiant demandé n'existe pas."
+            ];
             header('Location: index.php?page=students');
             exit;
         }
         
-        // Récupérer l'étudiant
-        $student = $this->student->getById($id);
+        // Récupérer et nettoyer les données
+        $student = [
+            'id' => $id,
+            'firstname' => trim($_POST['firstname'] ?? ''),
+            'lastname' => trim($_POST['lastname'] ?? ''),
+            'email' => trim($_POST['email'] ?? ''),
+            'password' => $_POST['password'] ?? '',
+            'password_confirm' => $_POST['password_confirm'] ?? '',
+            'is_active' => isset($_POST['is_active']) ? 1 : 0
+        ];
+        
+        // Si les champs de mot de passe sont vides, ne pas les modifier
+        $isPasswordChange = !empty($student['password']) || !empty($student['password_confirm']);
+        
+        // Valider les données
+        $errors = $this->validateStudentData($student, false, $isPasswordChange);
+        
+        if (empty($errors)) {
+            // Mettre à jour l'étudiant
+            $result = $this->studentModel->update($id, $student);
+            
+            if ($result) {
+                // Rediriger avec un message de succès
+                $_SESSION['flash'] = [
+                    'type' => 'success',
+                    'message' => 'Le compte étudiant a été modifié avec succès.'
+                ];
+                header('Location: index.php?page=students');
+                exit;
+            } else {
+                $errors['general'] = "Une erreur est survenue lors de la modification du compte. L'adresse email est peut-être déjà utilisée.";
+            }
+        }
+        
+        // En cas d'erreur, afficher le formulaire à nouveau
+        $pageTitle = 'Modifier un compte étudiant';
+        require_once 'Views/Student/form.php';
+    }
+    
+    /**
+     * Affiche la page de confirmation de suppression d'un étudiant
+     */
+    public function confirmDelete()
+    {
+        // Récupérer l'ID de l'étudiant
+        $id = $_GET['id'] ?? 0;
+        
+        // Récupérer les données de l'étudiant
+        $student = $this->studentModel->getById($id);
         
         if (!$student) {
-            Flash::setFlash('error', 'Étudiant non trouvé.');
+            $_SESSION['flash'] = [
+                'type' => 'danger',
+                'message' => "L'étudiant demandé n'existe pas."
+            ];
             header('Location: index.php?page=students');
             exit;
         }
         
-        // Charger la vue
+        // Afficher la vue
+        $pageTitle = 'Confirmer la suppression';
         require_once 'Views/Student/delete.php';
     }
     
@@ -305,36 +239,31 @@ class StudentController
      */
     public function destroy()
     {
-        // Vérifier les permissions (Admin uniquement)
-        if (!$this->auth->hasRole(['admin'])) {
-            Flash::setFlash('error', 'Vous n\'avez pas les permissions nécessaires pour accéder à cette page.');
-            header('Location: index.php?page=home');
-            exit;
-        }
+        // Récupérer l'ID de l'étudiant (maintenant depuis POST)
+        $id = $_POST['id'] ?? 0;
         
-        // Vérifier la méthode de requête
-        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-            Flash::setFlash('error', 'Méthode non autorisée.');
-            header('Location: index.php?page=students');
-            exit;
-        }
-        
-        // Récupérer l'ID de l'étudiant
-        $id = isset($_POST['id']) ? intval($_POST['id']) : 0;
-        
-        if ($id <= 0) {
-            Flash::setFlash('error', 'ID d\'étudiant invalide.');
+        if (!$id) {
+            $_SESSION['flash'] = [
+                'type' => 'danger',
+                'message' => "Identifiant d'étudiant invalide."
+            ];
             header('Location: index.php?page=students');
             exit;
         }
         
         // Supprimer l'étudiant
-        $result = $this->student->delete($id);
+        $result = $this->studentModel->delete($id);
         
         if ($result) {
-            Flash::setFlash('success', 'L\'étudiant a été supprimé avec succès.');
+            $_SESSION['flash'] = [
+                'type' => 'success',
+                'message' => "Le compte étudiant a été supprimé avec succès."
+            ];
         } else {
-            Flash::setFlash('error', 'Une erreur est survenue lors de la suppression de l\'étudiant. Vérifiez qu\'il n\'a pas de candidatures actives.');
+            $_SESSION['flash'] = [
+                'type' => 'danger',
+                'message' => "Une erreur est survenue lors de la suppression du compte étudiant."
+            ];
         }
         
         header('Location: index.php?page=students');
@@ -342,21 +271,77 @@ class StudentController
     }
     
     /**
-     * Affiche les statistiques globales des étudiants
+     * Affiche les statistiques des étudiants
      */
     public function statistics()
     {
-        // Vérifier les permissions (Admin ou Pilote uniquement)
-        if (!$this->auth->hasRole(['admin', 'pilote'])) {
-            Flash::setFlash('error', 'Vous n\'avez pas les permissions nécessaires pour accéder à cette page.');
-            header('Location: index.php?page=home');
-            exit;
+        // Récupérer les statistiques des étudiants
+        $statistics = $this->studentModel->getGlobalStatistics();
+        
+        // Afficher la vue
+        $pageTitle = 'Statistiques des étudiants';
+        require_once 'Views/Student/statistics.php';
+    }
+    
+    /**
+     * Redirige vers la page d'accès non autorisé
+     */
+    private function redirectToUnauthorized()
+    {
+        $_SESSION['flash'] = [
+            'type' => 'danger',
+            'message' => "Vous n'avez pas les droits nécessaires pour accéder à cette page."
+        ];
+        header('Location: index.php?page=unauthorized');
+        exit;
+    }
+    
+    /**
+     * Valide les données d'un étudiant
+     * 
+     * @param array $data Données de l'étudiant
+     * @param bool $isNewStudent S'il s'agit d'un nouvel étudiant
+     * @param bool $validatePassword Si le mot de passe doit être validé
+     * @return array Erreurs de validation
+     */
+    private function validateStudentData($data, $isNewStudent = true, $validatePassword = true)
+    {
+        $errors = [];
+        
+        // Valider le prénom
+        if (empty($data['firstname'])) {
+            $errors['firstname'] = "Le prénom est obligatoire.";
+        } elseif (strlen($data['firstname']) > 50) {
+            $errors['firstname'] = "Le prénom ne peut pas dépasser 50 caractères.";
         }
         
-        // Récupérer les statistiques globales
-        $globalStats = $this->student->getGlobalStatistics();
+        // Valider le nom
+        if (empty($data['lastname'])) {
+            $errors['lastname'] = "Le nom est obligatoire.";
+        } elseif (strlen($data['lastname']) > 50) {
+            $errors['lastname'] = "Le nom ne peut pas dépasser 50 caractères.";
+        }
         
-        // Charger la vue
-        require_once 'Views/Student/statistics.php';
+        // Valider l'email
+        if (empty($data['email'])) {
+            $errors['email'] = "L'adresse email est obligatoire.";
+        } elseif (!filter_var($data['email'], FILTER_VALIDATE_EMAIL)) {
+            $errors['email'] = "L'adresse email n'est pas valide.";
+        } elseif (strlen($data['email']) > 100) {
+            $errors['email'] = "L'adresse email ne peut pas dépasser 100 caractères.";
+        }
+        
+        // Valider le mot de passe si nécessaire
+        if ($validatePassword) {
+            if (empty($data['password'])) {
+                $errors['password'] = "Le mot de passe est obligatoire.";
+            } elseif (strlen($data['password']) < 8) {
+                $errors['password'] = "Le mot de passe doit contenir au moins 8 caractères.";
+            } elseif ($data['password'] !== $data['password_confirm']) {
+                $errors['password_confirm'] = "Les mots de passe ne correspondent pas.";
+            }
+        }
+        
+        return $errors;
     }
 }

@@ -1,76 +1,55 @@
-<?php
-$pageTitle = "Supprimer l'étudiant";
-require_once __DIR__ . '/../Templates/header.php';
-$auth = \Models\Auth::getInstance();
-?>
+<?php include_once __DIR__ . '/../Templates/header.php'; ?>
 
 <div class="container mt-4">
-    <div class="row">
-        <div class="col-md-8 offset-md-2">
-            <div class="card border-danger">
-                <div class="card-header bg-danger text-white">
-                    <h2 class="mb-0">Confirmation de suppression</h2>
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1><i class="fas fa-user-graduate me-2"></i>Supprimer un étudiant</h1>
+        <a href="index.php?page=students" class="btn btn-outline-secondary">
+            <i class="fas fa-arrow-left me-1"></i>Retour à la liste
+        </a>
+    </div>
+    
+    <?php if ($student): ?>
+        <div class="card border-danger">
+            <div class="card-header bg-danger text-white">
+                <h5 class="mb-0"><i class="fas fa-exclamation-triangle me-2"></i>Confirmation de suppression</h5>
+            </div>
+            <div class="card-body">
+                <div class="alert alert-warning">
+                    <p class="mb-1">Êtes-vous sûr de vouloir supprimer le compte de l'étudiant :</p>
+                    <p class="h4 mb-3 text-center">
+                        <strong><?= htmlspecialchars($student['firstname'] . " " . $student['lastname']) ?></strong>
+                        <small class="d-block text-muted"><?= htmlspecialchars($student['email']) ?></small>
+                    </p>
+                    <p class="text-danger mb-0">
+                        <i class="fas fa-exclamation-circle me-1"></i>
+                        <strong>Attention :</strong> Cette action est irréversible et supprimera également toutes les données associées à cet étudiant.
+                    </p>
                 </div>
-                <div class="card-body">
-                    <!-- Affichage des messages flash -->
-                    <?php require_once 'Views/Templates/flash.php'; ?>
-                    
-                    <div class="alert alert-warning">
-                        <i class="fas fa-exclamation-triangle me-2"></i>
-                        <strong>Attention :</strong> Vous êtes sur le point de supprimer définitivement cet étudiant.
-                        Cette action est irréversible.
+                
+                <form method="post" action="index.php?page=students&action=destroy">
+                    <input type="hidden" name="id" value="<?= $student['id'] ?>">
+                    <div class="d-flex justify-content-between mt-4">
+                        <button type="submit" class="btn btn-danger">
+                            <i class="fas fa-trash me-1"></i>Supprimer définitivement
+                        </button>
+                        <a href="index.php?page=students" class="btn btn-outline-secondary">
+                            <i class="fas fa-times me-1"></i>Annuler
+                        </a>
                     </div>
-                    
-                    <div class="card mb-4">
-                        <div class="card-body">
-                            <h4 class="card-title text-danger">Étudiant à supprimer :</h4>
-                            <p class="card-text">
-                                <strong>Nom :</strong> <?= htmlspecialchars($student['lastname']) ?><br>
-                                <strong>Prénom :</strong> <?= htmlspecialchars($student['firstname']) ?><br>
-                                <strong>Email :</strong> <?= htmlspecialchars($student['email']) ?><br>
-                            </p>
-                            
-                            <hr>
-                            
-                            <h5>Conséquences de la suppression :</h5>
-                            <ul class="list-group list-group-flush mb-3">
-                                <li class="list-group-item">
-                                    <i class="fas fa-trash-alt text-danger me-2"></i>
-                                    Toutes les candidatures de cet étudiant seront supprimées
-                                </li>
-                                <li class="list-group-item">
-                                    <i class="fas fa-trash-alt text-danger me-2"></i>
-                                    Toutes les offres dans sa wishlist seront supprimées
-                                </li>
-                                <li class="list-group-item">
-                                    <i class="fas fa-trash-alt text-danger me-2"></i>
-                                    Les informations personnelles de l'étudiant seront définitivement perdues
-                                </li>
-                            </ul>
-                            
-                            <div class="alert alert-info">
-                                <i class="fas fa-info-circle me-2"></i>
-                                Note : Si l'étudiant a des candidatures acceptées, la suppression échouera.
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <form action="index.php?controller=student&action=destroy" method="POST" class="mt-4">
-                        <input type="hidden" name="id" value="<?= $student['id'] ?>">
-                        
-                        <div class="d-flex justify-content-between">
-                            <a href="index.php?controller=student&action=show&id=<?= $student['id'] ?>" class="btn btn-secondary">
-                                <i class="fas fa-arrow-left"></i> Annuler
-                            </a>
-                            <button type="submit" class="btn btn-danger">
-                                <i class="fas fa-trash-alt"></i> Confirmer la suppression
-                            </button>
-                        </div>
-                    </form>
-                </div>
+                </form>
             </div>
         </div>
-    </div>
+    <?php else: ?>
+        <div class="alert alert-danger">
+            <h5 class="alert-heading"><i class="fas fa-exclamation-triangle me-2"></i>Erreur</h5>
+            <p class="mb-0">Étudiant introuvable. Il a peut-être déjà été supprimé ou l'identifiant est invalide.</p>
+        </div>
+        <div class="text-center mt-4">
+            <a href="index.php?page=students" class="btn btn-primary">
+                <i class="fas fa-arrow-left me-1"></i>Retour à la liste des étudiants
+            </a>
+        </div>
+    <?php endif; ?>
 </div>
 
-<?php require_once 'Views/Templates/footer.php'; ?>
+<?php include_once __DIR__ . '/../Templates/footer.php'; ?>

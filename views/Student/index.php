@@ -1,162 +1,140 @@
-<?php
-$pageTitle = "Gestion des étudiants";
-require_once __DIR__ . '/../Templates/header.php';
-$auth = \Models\Auth::getInstance();
-?>
+<?php include_once __DIR__ . '/../Templates/header.php'; ?>
 
 <div class="container mt-4">
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h1>Liste des étudiants</h1>
-        <?php if ($auth->hasRole(['admin', 'pilote'])) : ?>
-            <a href="index.php?page=students&action=create" class="btn btn-primary">
-                <i class="fas fa-plus"></i> Ajouter un étudiant
-            </a>
-        <?php endif; ?>
+        <h1><i class="fas fa-user-graduate me-2"></i><?= $pageTitle ?></h1>
+        <a href="index.php?page=students&action=create" class="btn btn-primary">
+            <i class="fas fa-plus me-1"></i>Nouvel étudiant
+        </a>
     </div>
-
-    <!-- Affichage des messages flash -->
-    <?php require_once 'Views/Templates/flash.php'; ?>
-
-    <!-- Formulaire de recherche -->
+    
+    <!-- Recherche -->
     <div class="card mb-4">
         <div class="card-header bg-light">
-            <h5 class="mb-0">Rechercher</h5>
+            <h5 class="mb-0"><i class="fas fa-search me-2"></i>Rechercher des étudiants</h5>
         </div>
         <div class="card-body">
-            <form action="index.php" method="GET" class="row g-3">
+            <form action="index.php" method="GET" id="searchForm">
                 <input type="hidden" name="page" value="students">
                 
-                <div class="col-md-4">
-                    <label for="firstname" class="form-label">Prénom</label>
-                    <input type="text" class="form-control" id="firstname" name="firstname" 
-                           value="<?= isset($_GET['firstname']) ? htmlspecialchars($_GET['firstname']) : '' ?>">
-                </div>
-                
-                <div class="col-md-4">
-                    <label for="lastname" class="form-label">Nom</label>
-                    <input type="text" class="form-control" id="lastname" name="lastname"
-                           value="<?= isset($_GET['lastname']) ? htmlspecialchars($_GET['lastname']) : '' ?>">
-                </div>
-                
-                <div class="col-md-4">
-                    <label for="email" class="form-label">Email</label>
-                    <input type="email" class="form-control" id="email" name="email"
-                           value="<?= isset($_GET['email']) ? htmlspecialchars($_GET['email']) : '' ?>">
-                </div>
-                
-                <div class="col-12 text-end">
-                    <button type="submit" class="btn btn-primary">
-                        <i class="fas fa-search"></i> Rechercher
-                    </button>
-                    <a href="index.php?page=students" class="btn btn-secondary">
-                        <i class="fas fa-redo"></i> Réinitialiser
-                    </a>
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <div class="input-group">
+                            <input type="text" class="form-control" name="search" 
+                                   placeholder="Rechercher par nom, prénom ou email" 
+                                   value="<?= htmlspecialchars($search ?? '') ?>">
+                            <button class="btn btn-primary" type="submit">
+                                <i class="fas fa-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="col-md-6 text-md-end">
+                        <?php if (!empty($search)): ?>
+                            <a href="index.php?page=students" class="btn btn-outline-secondary">
+                                <i class="fas fa-times me-1"></i>Réinitialiser
+                            </a>
+                        <?php endif; ?>
+                    </div>
                 </div>
             </form>
         </div>
     </div>
-
-    <!-- Statistiques rapides -->
-    <div class="mb-4">
-        <a href="index.php?page=students&action=stats" class="btn btn-info">
-            <i class="fas fa-chart-bar"></i> Voir les statistiques détaillées
-        </a>
-    </div>
-
-    <!-- Tableau des étudiants -->
-    <?php if (empty($students)) : ?>
-        <div class="alert alert-info">
-            Aucun étudiant trouvé.
+    
+    <!-- Résultats -->
+    <div class="card">
+        <div class="card-header bg-light">
+            <div class="d-flex justify-content-between align-items-center">
+                <h5 class="mb-0"><i class="fas fa-list me-2"></i>Liste des étudiants</h5>
+                <span class="badge bg-primary"><?= $totalStudents ?> étudiant(s)</span>
+            </div>
         </div>
-    <?php else : ?>
-        <div class="table-responsive">
-            <table class="table table-striped table-hover">
-                <thead class="table-dark">
-                    <tr>
-                        <th>ID</th>
-                        <th>Nom</th>
-                        <th>Prénom</th>
-                        <th>Email</th>
-                        <th>Candidatures</th>
-                        <th>Wishlist</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php foreach ($students as $student) : ?>
-                        <tr>
-                            <td><?= htmlspecialchars($student['id']) ?></td>
-                            <td><?= htmlspecialchars($student['lastname']) ?></td>
-                            <td><?= htmlspecialchars($student['firstname']) ?></td>
-                            <td><?= htmlspecialchars($student['email']) ?></td>
-                            <td>
-                                <span class="badge bg-primary">
-                                    <?= htmlspecialchars($student['application_count']) ?>
-                                </span>
-                            </td>
-                            <td>
-                                <span class="badge bg-secondary">
-                                    <?= htmlspecialchars($student['wishlist_count']) ?>
-                                </span>
-                            </td>
-                            <td>
-                                <div class="btn-group" role="group">
-                                    <a href="index.php?page=students&action=view&id=<?= $student['id'] ?>" 
-                                       class="btn btn-sm btn-info" title="Voir">
-                                        <i class="fas fa-eye"></i>
+        <div class="card-body">
+            <?php if (empty($students)): ?>
+                <div class="alert alert-info">
+                    <i class="fas fa-info-circle me-2"></i>Aucun étudiant trouvé.
+                </div>
+            <?php else: ?>
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Nom</th>
+                                <th>Prénom</th>
+                                <th>Email</th>
+                                <th>Statut</th>
+                                <th class="text-center">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach ($students as $stu): ?>
+                                <tr>
+                                    <td><?= htmlspecialchars($stu['lastname']) ?></td>
+                                    <td><?= htmlspecialchars($stu['firstname']) ?></td>
+                                    <td><?= htmlspecialchars($stu['email']) ?></td>
+                                    <td>
+                                        <span class="badge <?= $stu['is_active'] ? 'bg-success' : 'bg-danger' ?>">
+                                            <?= $stu['is_active'] ? 'Actif' : 'Inactif' ?>
+                                        </span>
+                                    </td>
+                                    <td class="text-center">
+                                        <div class="btn-group btn-group-sm">
+                                            <a href="index.php?page=students&action=edit&id=<?= $stu['id'] ?>" 
+                                               class="btn btn-outline-primary" title="Modifier">
+                                                <i class="fas fa-edit"></i>
+                                            </a>
+                                            <a href="index.php?page=students&action=confirm-delete&id=<?= $stu['id'] ?>" 
+                                               class="btn btn-outline-danger" title="Supprimer">
+                                                <i class="fas fa-trash"></i>
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <!-- Pagination -->
+                <?php if ($totalPages > 1): ?>
+                    <nav aria-label="Pagination" class="mt-4">
+                        <ul class="pagination justify-content-center">
+                            <!-- Bouton précédent -->
+                            <li class="page-item <?= ($page <= 1) ? 'disabled' : '' ?>">
+                                <a class="page-link" href="index.php?page=students&page_num=<?= $page - 1 ?><?= !empty($search) ? '&search=' . urlencode($search) : '' ?>">
+                                    <i class="fas fa-chevron-left"></i>
+                                </a>
+                            </li>
+                            
+                            <!-- Pages numérotées -->
+                            <?php
+                            $startPage = max(1, $page - 2);
+                            $endPage = min($startPage + 4, $totalPages);
+                            
+                            if ($endPage - $startPage < 4 && $startPage > 1) {
+                                $startPage = max(1, $endPage - 4);
+                            }
+                            
+                            for ($i = $startPage; $i <= $endPage; $i++):
+                            ?>
+                                <li class="page-item <?= ($i == $page) ? 'active' : '' ?>">
+                                    <a class="page-link" href="index.php?page=students&page_num=<?= $i ?><?= !empty($search) ? '&search=' . urlencode($search) : '' ?>">
+                                        <?= $i ?>
                                     </a>
-                                    <?php if ($auth->hasRole(['admin', 'pilote'])) : ?>
-                                        <a href="index.php?page=students&action=edit&id=<?= $student['id'] ?>" 
-                                           class="btn btn-sm btn-warning" title="Modifier">
-                                            <i class="fas fa-edit"></i>
-                                        </a>
-                                    <?php endif; ?>
-                                    <?php if ($auth->hasRole(['admin'])) : ?>
-                                        <a href="index.php?page=students&action=delete&id=<?= $student['id'] ?>" 
-                                           class="btn btn-sm btn-danger" title="Supprimer">
-                                            <i class="fas fa-trash"></i>
-                                        </a>
-                                    <?php endif; ?>
-                                </div>
-                            </td>
-                        </tr>
-                    <?php endforeach; ?>
-                </tbody>
-            </table>
+                                </li>
+                            <?php endfor; ?>
+                            
+                            <!-- Bouton suivant -->
+                            <li class="page-item <?= ($page >= $totalPages) ? 'disabled' : '' ?>">
+                                <a class="page-link" href="index.php?page=students&page_num=<?= $page + 1 ?><?= !empty($search) ? '&search=' . urlencode($search) : '' ?>">
+                                    <i class="fas fa-chevron-right"></i>
+                                </a>
+                            </li>
+                        </ul>
+                    </nav>
+                <?php endif; ?>
+            <?php endif; ?>
         </div>
-    <?php endif; ?>
-
-    <!-- Pagination (simple) -->
-    <nav aria-label="Page navigation">
-        <ul class="pagination justify-content-center">
-            <?php 
-            $currentPage = isset($_GET['page_num']) ? intval($_GET['page_num']) : 1;
-            $prevPage = max(1, $currentPage - 1);
-            $nextPage = $currentPage + 1;
-            
-            // Construire l'URL avec les paramètres de recherche
-            $queryParams = $_GET;
-            $queryParams['page'] = 'students';
-            unset($queryParams['page_num']);
-            $queryString = http_build_query($queryParams);
-            $baseUrl = 'index.php?' . $queryString . '&page_num=';
-            ?>
-            
-            <li class="page-item <?= ($currentPage == 1) ? 'disabled' : '' ?>">
-                <a class="page-link" href="<?= $baseUrl . $prevPage ?>" aria-label="Previous">
-                    <span aria-hidden="true">&laquo;</span>
-                </a>
-            </li>
-            <li class="page-item active">
-                <span class="page-link"><?= $currentPage ?></span>
-            </li>
-            <li class="page-item <?= (count($students) < 10) ? 'disabled' : '' ?>">
-                <a class="page-link" href="<?= $baseUrl . $nextPage ?>" aria-label="Next">
-                    <span aria-hidden="true">&raquo;</span>
-                </a>
-            </li>
-        </ul>
-    </nav>
+    </div>
 </div>
 
-<?php require_once 'Views/Templates/footer.php'; ?>
+<?php include_once __DIR__ . '/../Templates/footer.php'; ?>

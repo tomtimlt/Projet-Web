@@ -34,11 +34,11 @@ class Pilot
         // Tri
         $sql .= " ORDER BY u.lastname ASC, u.firstname ASC";
         
-        // Pagination
+        // Pagination - Utilisons des paramètres positionnels pour LIMIT et OFFSET
         if ($limit > 0) {
-            $sql .= " LIMIT :limit OFFSET :offset";
-            $params[':limit'] = (int)$limit;
-            $params[':offset'] = (int)$offset;
+            $sql .= " LIMIT ? OFFSET ?";
+            $params[] = (int)$limit;
+            $params[] = (int)$offset;
         }
         
         $stmt = $this->db->query($sql, $params);

@@ -1,112 +1,50 @@
-<?php
-$pageTitle = "Détails de l'étudiant";
-require_once __DIR__ . '/../Templates/header.php';
-$auth = \Models\Auth::getInstance();
-?>
+<?php if (session_status() === PHP_SESSION_NONE) session_start(); ?>
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Détails de l'étudiant</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body class="p-4">
+    <h1 class="mb-4">Détails de l'étudiant</h1>
 
-<div class="container mt-4">
-    <div class="row">
-        <div class="col-md-8 offset-md-2">
-            <!-- Affichage des messages flash -->
-            <?php require_once 'Views/Templates/flash.php'; ?>
-            
-            <div class="card mb-4">
-                <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
-                    <h2 class="mb-0">Profil étudiant</h2>
-                    <div>
-                        <?php if ($auth->hasRole(['admin', 'pilote'])) : ?>
-                            <a href="index.php?controller=student&action=edit&id=<?= $student['id'] ?>" class="btn btn-light btn-sm">
-                                <i class="fas fa-edit"></i> Modifier
-                            </a>
-                        <?php endif; ?>
-                        <?php if ($auth->hasRole(['admin'])) : ?>
-                            <a href="index.php?controller=student&action=delete&id=<?= $student['id'] ?>" class="btn btn-danger btn-sm">
-                                <i class="fas fa-trash"></i> Supprimer
-                            </a>
-                        <?php endif; ?>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <div class="row mb-4">
-                        <div class="col-md-12">
-                            <h3 class="text-primary">
-                                <?= htmlspecialchars($student['firstname'] . ' ' . $student['lastname']) ?>
-                            </h3>
-                            <p class="text-muted">
-                                <i class="fas fa-envelope"></i> <?= htmlspecialchars($student['email']) ?>
-                            </p>
-                            <p class="text-muted">
-                                <i class="fas fa-calendar-alt"></i> Inscrit le <?= date('d/m/Y', strtotime($student['created_at'])) ?>
-                            </p>
-                        </div>
-                    </div>
-                    
-                    <hr>
-                    
-                    <h4 class="mb-3">Statistiques de recherche de stage</h4>
-                    
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="card bg-light mb-3">
-                                <div class="card-header">Candidatures</div>
-                                <div class="card-body">
-                                    <div class="d-flex justify-content-between align-items-center mb-2">
-                                        <span>Total :</span>
-                                        <span class="badge bg-primary"><?= $stats['applications']['total'] ?></span>
-                                    </div>
-                                    <div class="d-flex justify-content-between align-items-center mb-2">
-                                        <span>En attente :</span>
-                                        <span class="badge bg-warning"><?= $stats['applications']['pending'] ?></span>
-                                    </div>
-                                    <div class="d-flex justify-content-between align-items-center mb-2">
-                                        <span>Acceptées :</span>
-                                        <span class="badge bg-success"><?= $stats['applications']['accepted'] ?></span>
-                                    </div>
-                                    <div class="d-flex justify-content-between align-items-center mb-2">
-                                        <span>Refusées :</span>
-                                        <span class="badge bg-danger"><?= $stats['applications']['rejected'] ?></span>
-                                    </div>
-                                    <div class="d-flex justify-content-between align-items-center">
-                                        <span>Retirées :</span>
-                                        <span class="badge bg-secondary"><?= $stats['applications']['withdrawn'] ?></span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="col-md-6">
-                            <div class="card bg-light mb-3">
-                                <div class="card-header">Wishlist</div>
-                                <div class="card-body">
-                                    <div class="d-flex justify-content-between align-items-center">
-                                        <span>Offres enregistrées :</span>
-                                        <span class="badge bg-info"><?= $stats['wishlist']['total'] ?></span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Boutons d'action -->
-                    <div class="mt-4 d-flex justify-content-between">
-                        <a href="index.php?controller=student&action=index" class="btn btn-secondary">
-                            <i class="fas fa-arrow-left"></i> Retour à la liste
-                        </a>
-                        
-                        <!-- Liens vers les candidatures et wishlist -->
-                        <div>
-                            <a href="index.php?controller=application&action=byStudent&id=<?= $student['id'] ?>" class="btn btn-primary">
-                                <i class="fas fa-file-alt"></i> Voir les candidatures
-                            </a>
-                            <a href="index.php?controller=wishlist&action=byStudent&id=<?= $student['id'] ?>" class="btn btn-info">
-                                <i class="fas fa-bookmark"></i> Voir la wishlist
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
+    <!-- Messages flash -->
+    <?php if (!empty($_SESSION['success'])): ?>
+        <div class="alert alert-success">
+            <?= $_SESSION['success']; unset($_SESSION['success']); ?>
         </div>
-    </div>
-</div>
+    <?php endif; ?>
+    <?php if (!empty($_SESSION['error'])): ?>
+        <div class="alert alert-danger">
+            <?= $_SESSION['error']; unset($_SESSION['error']); ?>
+        </div>
+    <?php endif; ?>
 
-<?php require_once 'Views/Templates/footer.php'; ?>
+    <!-- Informations de l'étudiant -->
+    <ul class="list-group mb-3">
+        <li class="list-group-item"><strong>ID :</strong> <?= htmlspecialchars($student['id']) ?></li>
+        <li class="list-group-item"><strong>Prénom :</strong> <?= htmlspecialchars($student['firstname']) ?></li>
+        <li class="list-group-item"><strong>Nom :</strong> <?= htmlspecialchars($student['lastname']) ?></li>
+        <li class="list-group-item"><strong>Email :</strong> <?= htmlspecialchars($student['email']) ?></li>
+        <li class="list-group-item"><strong>Statut du compte :</strong> <?= $student['is_active'] ? 'Actif' : 'Inactif' ?></li>
+        <li class="list-group-item"><strong>Compte créé le :</strong> 
+            <?php 
+            $dateC = date("d/m/Y à H:i", strtotime($student['created_at']));
+            echo htmlspecialchars($dateC);
+            ?>
+        </li>
+        <li class="list-group-item"><strong>Dernière mise à jour le :</strong> 
+            <?php 
+            $dateU = date("d/m/Y à H:i", strtotime($student['updated_at']));
+            echo htmlspecialchars($dateU);
+            ?>
+        </li>
+    </ul>
+
+    <!-- Boutons d'action -->
+    <a href="index.php?controller=Student&action=index" class="btn btn-secondary">Retour à la liste</a>
+    <a href="index.php?controller=Student&action=edit&id=<?= $student['id'] ?>" class="btn btn-primary">Éditer</a>
+    <a href="index.php?controller=Student&action=delete&id=<?= $student['id'] ?>" class="btn btn-danger">Supprimer</a>
+</body>
+</html>
