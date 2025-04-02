@@ -326,9 +326,9 @@ class CompanyController
         }
         
         // Récupérer l'ID de l'entreprise et la note
-        $companyId = isset($_POST['company_id']) ? (int)$_POST['company_id'] : 0;
-        $rating = isset($_POST['rating']) ? (int)$_POST['rating'] : 0;
-        $comment = isset($_POST['comment']) ? trim($_POST['comment']) : '';
+        $companyId = isset($_POST['entreprise_id']) ? (int)$_POST['entreprise_id'] : 0;
+        $rating = isset($_POST['note']) ? (int)$_POST['note'] : 0;
+        $comment = isset($_POST['commentaire']) ? trim($_POST['commentaire']) : '';
         
         if (!$companyId || $rating < 1 || $rating > 5) {
             $this->redirectWithError('companies&action=view&id=' . $companyId, 'Données d\'évaluation invalides');

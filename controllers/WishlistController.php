@@ -96,7 +96,7 @@ class WishlistController
     public function add()
     {
         // Récupérer les paramètres
-        $offerId = isset($_GET['id']) ? (int)$_GET['id'] : 0;
+        $offerId = isset($_GET['offer_id']) ? (int)$_GET['offer_id'] : (isset($_GET['id']) ? (int)$_GET['id'] : 0);
         $userId = $this->auth->getUserId();
         $isAdmin = $this->auth->hasRole(['admin']);
         

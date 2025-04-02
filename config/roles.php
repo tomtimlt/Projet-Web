@@ -32,7 +32,7 @@ return [
         'SFx5' => [
             'name' => 'Evaluer une entreprise',
             'category' => 'Gestion des entreprises',
-            'roles' => ['admin', 'pilote']
+            'roles' => ['admin', 'pilote', 'etudiant']
         ],
         'SFx6' => [
             'name' => 'Supprimer une entreprise',

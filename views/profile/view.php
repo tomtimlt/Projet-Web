@@ -65,8 +65,8 @@ $userModel->readOne($userId);
                 </div>
                 
                 <div class="actions">
-                    <a href="index.php?action=edit_profile" class="button">Modifier mon profil</a>
-                    <a href="index.php?action=change_password" class="button">Changer mon mot de passe</a>
+                <a href="index.php?action=edit_profile" class="button">Modifier mon profil</a>
+                <a href="index.php?action=change_password" class="button">Changer mon mot de passe</a>
                 </div>
             </section>
         </div>

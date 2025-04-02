@@ -1,18 +1,33 @@
 <?php
+namespace Controllers;
+
+use Models\User;
+use Models\Auth;
 
 class UserController {
     private $userModel;
     private $auth;
     
-    public function __construct($userModel, $auth) {
-        $this->userModel = $userModel;
-        $this->auth = $auth;
+    public function __construct() {
+        $this->userModel = new \Models\User();
+        $this->auth = \Models\Auth::getInstance();
     }
     
     // Affiche la page de profil de l'utilisateur connecté
     public function profile() {
         $userId = $this->auth->getUserId();
-        $user = $this->userModel->getUserById($userId);
+        $user = $this->userModel->find($userId);
+        
+        // Récupération de la liste des étudiants si l'utilisateur a les droits
+        $students = [];
+        $canViewStudents = $this->auth->hasPermission('view_students');
+        $canEditUsers = $this->auth->hasPermission('edit_users');
+        
+        if ($canViewStudents) {
+            $studentModel = new \Models\Student();
+            $students = $studentModel->getAll();
+        }
+        
         include 'views/profile.php';
     }
     
@@ -142,7 +157,8 @@ class UserController {
             }
         }
         
-        $user = $this->userModel->getUserById($id);
+        // Utiliser findWithPassword pour avoir accès au mot de passe hashé
+        $user = $this->userModel->findWithPassword($id);
         
         if (!$user) {
             $_SESSION['error'] = "Utilisateur introuvable.";
@@ -183,13 +199,16 @@ class UserController {
                 
                 if ($this->userModel->updatePassword($id, $hashedPassword)) {
                     $_SESSION['success'] = "Mot de passe mis à jour avec succès.";
-                    header('Location: index.php?page=user&action=view&id=' . $id);
+                    header('Location: index.php?page=profile');
                     exit();
                 } else {
                     $_SESSION['error'] = "Une erreur est survenue lors de la mise à jour du mot de passe.";
                 }
             }
         }
+        
+        // Stocker les données pour la vue
+        $_SESSION['user_id'] = $this->auth->getUserId();
         
         include 'views/User/change_password.php';
     }

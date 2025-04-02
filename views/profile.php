@@ -2,6 +2,23 @@
 <?php require_once 'Templates/header.php'; ?>
 
 <div class="container py-4">
+    <!-- Messages de notification -->
+    <?php if (isset($_SESSION['success'])): ?>
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <?= htmlspecialchars($_SESSION['success']) ?>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        <?php unset($_SESSION['success']); ?>
+    <?php endif; ?>
+    
+    <?php if (isset($_SESSION['error'])): ?>
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <?= htmlspecialchars($_SESSION['error']) ?>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        <?php unset($_SESSION['error']); ?>
+    <?php endif; ?>
+
     <div class="row">
         <div class="col-lg-4">
             <div class="card shadow-sm mb-4">
@@ -155,7 +172,7 @@
                                 <div class="card h-100 border-0 shadow-sm">
                                     <div class="card-body">
                                         <h5 class="card-title"><i class="fas fa-building me-2 text-primary"></i>Entreprises</h5>
-                                        <p class="card-text">Gérez les entreprises partenaires.</p>
+                                        <p class="card-text">Gérez toutes les entreprises partenaires.</p>
                                         <a href="index.php?page=companies" class="btn btn-sm btn-primary">Accéder</a>
                                     </div>
                                 </div>
@@ -166,8 +183,8 @@
                             <div class="col-md-6 mb-3">
                                 <div class="card h-100 border-0 shadow-sm">
                                     <div class="card-body">
-                                        <h5 class="card-title"><i class="fas fa-briefcase me-2 text-primary"></i>Offres</h5>
-                                        <p class="card-text">Gérez les offres de stage.</p>
+                                        <h5 class="card-title"><i class="fas fa-briefcase me-2 text-primary"></i>Offres de Stage</h5>
+                                        <p class="card-text">Gérez toutes les offres de stage du système.</p>
                                         <a href="index.php?page=offers" class="btn btn-sm btn-primary">Accéder</a>
                                     </div>
                                 </div>
@@ -175,37 +192,98 @@
                             <div class="col-md-6 mb-3">
                                 <div class="card h-100 border-0 shadow-sm">
                                     <div class="card-body">
-                                        <h5 class="card-title"><i class="fas fa-chart-line me-2 text-primary"></i>Statistiques</h5>
-                                        <p class="card-text">Rapports et statistiques globales.</p>
-                                        <a href="index.php?page=statistics" class="btn btn-sm btn-primary">Accéder</a>
+                                        <h5 class="card-title"><i class="fas fa-cog me-2 text-primary"></i>Paramètres</h5>
+                                        <p class="card-text">Configurez les paramètres généraux du système.</p>
+                                        <a href="index.php?page=settings" class="btn btn-sm btn-primary">Accéder</a>
                                     </div>
                                 </div>
                             </div>
                         </div>
-
-                    <?php else: ?>
-                        <div class="alert alert-info">
-                            <i class="fas fa-info-circle me-2"></i>
-                            Aucune information supplémentaire disponible pour votre rôle.
-                        </div>
                     <?php endif; ?>
                 </div>
             </div>
+            
+            <!-- Liste des étudiants - Visible uniquement pour les rôles autorisés -->
+            <?php if (!empty($students) && $canViewStudents): ?>
+            <div class="card shadow-sm mt-4">
+                <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                    <h4 class="mb-0">Liste des Étudiants</h4>
+                    <a href="index.php?page=students&action=export" class="btn btn-sm btn-light">
+                        <i class="fas fa-download me-1"></i> Exporter
+                    </a>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover" id="students-table">
+                            <thead>
+                                <tr>
+                                    <th>Nom</th>
+                                    <th>Prénom</th>
+                                    <th>Email</th>
+                                    <th>Candidatures</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php foreach ($students as $student): ?>
+                                <tr>
+                                    <td><?= htmlspecialchars($student['lastname'] ?? '') ?></td>
+                                    <td><?= htmlspecialchars($student['firstname'] ?? '') ?></td>
+                                    <td><?= htmlspecialchars($student['email'] ?? '') ?></td>
+                                    <td>
+                                        <span class="badge bg-primary"><?= (int)($student['application_count'] ?? 0) ?></span>
+                                    </td>
+                                    <td>
+                                        <div class="btn-group btn-group-sm">
+                                            <a href="index.php?page=student&action=view&id=<?= $student['id'] ?>" class="btn btn-outline-primary" title="Voir le profil">
+                                                <i class="fas fa-eye"></i>
+                                            </a>
+                                            <?php if ($canEditUsers): ?>
+                                            <a href="index.php?page=student&action=edit&id=<?= $student['id'] ?>" class="btn btn-outline-secondary" title="Modifier">
+                                                <i class="fas fa-edit"></i>
+                                            </a>
+                                            <a href="index.php?page=password&action=change&id=<?= $student['id'] ?>" class="btn btn-outline-warning" title="Modifier le mot de passe">
+                                                <i class="fas fa-key"></i>
+                                            </a>
+                                            <?php endif; ?>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <?php endif; ?>
         </div>
     </div>
 </div>
 
-<style>
-.avatar-placeholder {
-    width: 100px;
-    height: 100px;
-    border-radius: 50%;
-    background-color: #f8f9fa;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 0 auto;
-}
-</style>
+<!-- Script pour l'interactivité du tableau des étudiants -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const studentsTable = document.getElementById('students-table');
+    if (studentsTable) {
+        // Fonction de recherche dans le tableau
+        const searchInput = document.createElement('input');
+        searchInput.classList.add('form-control', 'mb-3');
+        searchInput.setAttribute('placeholder', 'Rechercher un étudiant...');
+        searchInput.addEventListener('keyup', function() {
+            const searchTerm = searchInput.value.toLowerCase();
+            const rows = studentsTable.querySelectorAll('tbody tr');
+            
+            rows.forEach(row => {
+                const text = row.textContent.toLowerCase();
+                row.style.display = text.includes(searchTerm) ? '' : 'none';
+            });
+        });
+        
+        // Insérer le champ de recherche avant le tableau
+        const tableContainer = studentsTable.parentNode;
+        tableContainer.insertBefore(searchInput, studentsTable);
+    }
+});
+</script>
 
 <?php require_once 'Templates/footer.php'; ?>

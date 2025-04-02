@@ -5,6 +5,7 @@
  */
 class EntrepriseController {
     private $entrepriseModel;
+    private $evaluationModel;
     private $pdo;
 
     /**
@@ -14,7 +15,9 @@ class EntrepriseController {
     public function __construct($pdo) {
         $this->pdo = $pdo;
         require_once 'models/EntrepriseModel.php';
+        require_once 'models/Evaluation.php';
         $this->entrepriseModel = new EntrepriseModel($pdo);
+        $this->evaluationModel = new Evaluation($pdo);
     }
 
     /**
@@ -64,22 +67,28 @@ class EntrepriseController {
         // Récupérer les statistiques
         $statistiques = $this->entrepriseModel->getStatistiques($id);
         
-        // Récupérer les évaluations
-        $page = isset($_GET['page_eval']) ? (int)$_GET['page_eval'] : 1;
-        $perPage = 5; // Nombre d'évaluations par page
-        $evaluations = $this->entrepriseModel->getEvaluations($id, $page, $perPage);
+        // Récupérer la notation moyenne de l'entreprise
+        $rating = $this->evaluationModel->getAverageRating($id);
+        
+        // Récupérer les évaluations (limité à 3 pour l'aperçu)
+        $stmt = $this->evaluationModel->readByEntreprise($id, 1, 3);
+        $evaluations = $stmt->fetchAll(PDO::FETCH_OBJ);
+        
+        // Nombre total d'évaluations
+        $totalEvaluations = $this->evaluationModel->countByEntreprise($id);
         
         // Vérifier si l'utilisateur a déjà évalué cette entreprise
         $evaluation_utilisateur = null;
         if (isset($_SESSION['user_id'])) {
-            $query = "SELECT * FROM evaluation_entreprise 
-                    WHERE entreprise_id = :entreprise_id AND utilisateur_id = :utilisateur_id";
-            $stmt = $this->pdo->prepare($query);
-            $stmt->execute([
-                'entreprise_id' => $id,
-                'utilisateur_id' => $_SESSION['user_id']
-            ]);
-            $evaluation_utilisateur = $stmt->fetch(PDO::FETCH_ASSOC);
+            if ($this->evaluationModel->userHasEvaluated($id, $_SESSION['user_id'])) {
+                $this->evaluationModel->readUserEvaluation($id, $_SESSION['user_id']);
+                $evaluation_utilisateur = [
+                    'id' => $this->evaluationModel->id,
+                    'note' => $this->evaluationModel->note,
+                    'commentaire' => $this->evaluationModel->commentaire,
+                    'date_evaluation' => $this->evaluationModel->date_evaluation
+                ];
+            }
         }
         
         // Inclure la vue
@@ -230,44 +239,11 @@ class EntrepriseController {
     }
 
     /**
-     * Enregistre une évaluation pour une entreprise
+     * Redirige vers le contrôleur d'évaluation
      * @param int $id ID de l'entreprise à évaluer
      */
     public function evaluer($id) {
-        // Vérifier si l'utilisateur est connecté
-        if (!isset($_SESSION['user_id'])) {
-            header('Location: index.php?controller=auth&action=login&error=login_required');
-            exit;
-        }
-        
-        // Vérifier les permissions
-        if (!$this->verifierPermission('evaluer')) {
-            header('Location: index.php?controller=entreprise&action=voir&id=' . $id . '&error=permission_denied');
-            exit;
-        }
-        
-        // Vérifier si le formulaire a été soumis
-        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-            header('Location: index.php?controller=entreprise&action=voir&id=' . $id);
-            exit;
-        }
-        
-        // Valider les données
-        $note = isset($_POST['note']) ? (int)$_POST['note'] : 0;
-        $commentaire = isset($_POST['commentaire']) ? trim($_POST['commentaire']) : '';
-        
-        if ($note < 1 || $note > 5) {
-            header('Location: index.php?controller=entreprise&action=voir&id=' . $id . '&error=note_invalide');
-            exit;
-        }
-        
-        // Enregistrer l'évaluation
-        $success = $this->entrepriseModel->evaluer($id, $_SESSION['user_id'], $note, htmlspecialchars($commentaire));
-        
-        // Rediriger avec un message
-        $message = $success ? 'Évaluation enregistrée avec succès.' : 'Erreur lors de l\'enregistrement de l\'évaluation.';
-        $type = $success ? 'success' : 'error';
-        header('Location: index.php?controller=entreprise&action=voir&id=' . $id . '&' . $type . '=' . urlencode($message));
+        header('Location: index.php?controller=evaluation&action=evaluer&id=' . $id);
         exit;
     }
 
@@ -361,7 +337,8 @@ class EntrepriseController {
         // Récupérer le rôle de l'utilisateur
         $query = "SELECT role FROM utilisateur WHERE id = :id";
         $stmt = $this->pdo->prepare($query);
-        $stmt->execute(['id' => $_SESSION['user_id']]);
+        $stmt->bindParam(':id', $_SESSION['user_id'], PDO::PARAM_INT);
+        $stmt->execute();
         $user = $stmt->fetch(PDO::FETCH_ASSOC);
         
         if (!$user) {
@@ -379,7 +356,7 @@ class EntrepriseController {
             'etudiant' => ['evaluer']
         ];
         
-        // Vérifier si l'action est autorisée pour ce rôle
-        return in_array($action, $permissions[strtolower($user['role'])] ?? []);
+        // Vérifier si l'utilisateur a la permission
+        return isset($permissions[$user['role']]) && in_array($action, $permissions[$user['role']]);
     }
 }

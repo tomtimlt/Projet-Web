@@ -70,7 +70,7 @@ class ApplicationController
             $student = null;
             if ($isAdmin && $studentId != $userId) {
                 $userModel = new \Models\User();
-                $student = $userModel->getUserById($studentId);
+                $student = $userModel->find($studentId);
             }
             
             require_once 'Views/Application/index.php';
@@ -90,13 +90,13 @@ class ApplicationController
         }
 
         // Vérifier que l'ID de l'offre est fourni
-        if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
+        if (!isset($_GET['offer_id']) || !is_numeric($_GET['offer_id'])) {
             $this->flash->setFlash('error', "Identifiant d'offre invalide.");
             header('Location: index.php?page=offers');
             exit;
         }
 
-        $offerId = (int)$_GET['id'];
+        $offerId = (int)$_GET['offer_id'];
         $userId = $this->auth->getUserId();
 
         // Vérifier que l'offre existe
@@ -174,7 +174,7 @@ class ApplicationController
         // S'il y a des erreurs, rediriger vers le formulaire
         if (!empty($errors)) {
             $this->flash->setFlash('error', implode("<br>", $errors));
-            header("Location: index.php?page=applications&action=apply&id={$offerId}");
+            header("Location: index.php?page=applications&action=apply&offer_id={$offerId}");
             exit;
         }
 
@@ -196,7 +196,7 @@ class ApplicationController
             header('Location: index.php?page=applications');
         } else {
             $this->flash->setFlash('error', "Une erreur est survenue lors de la soumission de votre candidature.");
-            header("Location: index.php?page=applications&action=apply&id={$offerId}");
+            header("Location: index.php?page=applications&action=apply&offer_id={$offerId}");
         }
         exit;
     }

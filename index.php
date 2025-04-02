@@ -53,6 +53,7 @@ $routes = [
     // Routes principales de l'application
     'home' => ['controller' => 'HomeController', 'action' => 'index'],
     'profile' => ['controller' => 'HomeController', 'action' => 'profile'],
+    'password' => ['controller' => 'UserController', 'action' => 'changePassword'],
     
     // Routes des entreprises
     'companies' => ['controller' => 'CompanyController', 'action' => 'index'],
@@ -63,6 +64,12 @@ $routes = [
     'company_stats' => ['controller' => 'CompanyController', 'action' => 'stats'],
     'company_rate' => ['controller' => 'CompanyController', 'action' => 'rate'],
     'company_delete_rating' => ['controller' => 'CompanyController', 'action' => 'deleteRating'],
+    
+    // Routes des évaluations
+    'evaluations' => ['controller' => 'EvaluationController', 'action' => 'mesEvaluations'],
+    'evaluation_entreprise' => ['controller' => 'EvaluationController', 'action' => 'parEntreprise'],
+    'evaluation_evaluer' => ['controller' => 'EvaluationController', 'action' => 'evaluer'],
+    'evaluation_supprimer' => ['controller' => 'EvaluationController', 'action' => 'supprimer'],
     
     // Routes des offres
     'offers' => ['controller' => 'OfferController', 'action' => 'index'],
@@ -96,10 +103,13 @@ $routes = [
     
     // Routes des pages statiques
     'pages' => ['controller' => 'PageController', 'action' => 'legal'],
+
+    // Profil
+    'edit_profile' => ['controller' => 'UserController', 'action' => 'editProfile'],
 ];
 
 // Gestion du paramètre action pour la rétrocompatibilité
-if ($action && in_array($page, ['companies', 'offers', 'students', 'pilots', 'wishlist', 'applications', 'pages'])) {
+if ($action && in_array($page, ['companies', 'offers', 'students', 'pilots', 'wishlist', 'applications', 'pages', 'evaluations'])) {
     // Mappage des actions spéciales
     $actionMappings = [
         'companies' => [
@@ -148,6 +158,12 @@ if ($action && in_array($page, ['companies', 'offers', 'students', 'pilots', 'wi
         'pages' => [
             'legal' => 'legal',
             'privacy' => 'privacy',
+        ],
+        'evaluations' => [
+            'mes_evaluations' => 'mesEvaluations',
+            'par_entreprise' => 'parEntreprise',
+            'evaluer' => 'evaluer',
+            'supprimer' => 'supprimer',
         ]
     ];
     
@@ -165,6 +181,8 @@ if ($action && in_array($page, ['companies', 'offers', 'students', 'pilots', 'wi
             $controllerName .= "ApplicationController";
         } elseif ($page === 'pages') {
             $controllerName .= "PageController";
+        } elseif ($page === 'evaluations') {
+            $controllerName .= "EvaluationController";
         } else {
             $controllerName .= ucfirst(rtrim($page, 's')) . "Controller";
         }
@@ -198,10 +216,10 @@ if (class_exists($controllerName)) {
         // Exécuter l'action
         $controller->$actionName();
     } else {
-        // Action non trouvée
-        die("Erreur: L'action {$actionName} n'existe pas dans le contrôleur {$controllerName}");
+        // Action non trouvée, afficher une erreur
+        die("L'action '{$actionName}' n'existe pas dans le contrôleur '{$controllerName}'");
     }
 } else {
-    // Contrôleur non trouvé
-    die("Erreur: Le contrôleur {$controllerName} n'existe pas");
+    // Contrôleur non trouvé, afficher une erreur
+    die("Le contrôleur '{$controllerName}' n'existe pas");
 }

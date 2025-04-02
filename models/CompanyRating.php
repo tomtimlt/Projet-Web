@@ -80,6 +80,7 @@ class CompanyRating
         ];
         
         try {
+            // Utiliser l'instance $this->db déjà initialisée dans le constructeur
             $this->db->query($sql, $params);
             return true;
         } catch (\Exception $e) {

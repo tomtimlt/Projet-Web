@@ -64,6 +64,21 @@ class User
     }
     
     /**
+     * Trouve un utilisateur par son ID avec son mot de passe
+     * 
+     * @param int $id ID de l'utilisateur
+     * @return array|bool Les données de l'utilisateur ou false s'il n'est pas trouvé
+     */
+    public function findWithPassword($id) 
+    {
+        $sql = "SELECT id, email, password, firstname, lastname, role, is_active, created_at, updated_at 
+                FROM users WHERE id = :id";
+        $stmt = $this->db->query($sql, [':id' => $id]);
+        
+        return $stmt->fetch() ?: false;
+    }
+    
+    /**
      * Trouve un utilisateur par son email
      * 
      * @param string $email Email de l'utilisateur
@@ -161,6 +176,30 @@ class User
             return true;
         } catch (\Exception $e) {
             error_log("Erreur lors de la mise à jour de l'utilisateur: " . $e->getMessage());
+            return false;
+        }
+    }
+    
+    /**
+     * Met à jour le mot de passe d'un utilisateur
+     * 
+     * @param int $id ID de l'utilisateur
+     * @param string $hashedPassword Mot de passe déjà hashé
+     * @return bool Succès ou échec
+     */
+    public function updatePassword($id, $hashedPassword) 
+    {
+        $sql = "UPDATE users SET password = :password WHERE id = :id";
+        $params = [
+            ':id' => $id,
+            ':password' => $hashedPassword
+        ];
+        
+        try {
+            $this->db->query($sql, $params);
+            return true;
+        } catch (\Exception $e) {
+            error_log("Erreur lors de la mise à jour du mot de passe: " . $e->getMessage());
             return false;
         }
     }
