@@ -112,7 +112,7 @@ class EvaluationController {
         if ($_SERVER['REQUEST_METHOD'] !== 'POST' || !isset($_POST['entreprise_id'])) {
             // Si l'ID de l'entreprise est passé en GET, rediriger vers la page de l'entreprise
             if (isset($_GET['id'])) {
-                header('Location: index.php?page=evaluation_entreprise&id=' . (int)$_GET['id']);
+                header('Location: index.php?page=evaluations&action=par_entreprise&id=' . (int)$_GET['id']);
             } else {
                 header('Location: index.php?page=companies');
             }
@@ -131,7 +131,7 @@ class EvaluationController {
         }
         
         if ($note < 1 || $note > 5) {
-            header('Location: index.php?page=evaluation_entreprise&id=' . $entrepriseId . '&error=note_invalide');
+            header('Location: index.php?page=evaluations&action=par_entreprise&id=' . $entrepriseId . '&error=note_invalide');
             exit;
         }
         
@@ -147,7 +147,7 @@ class EvaluationController {
         // Rediriger avec un message
         $message = $success ? 'Évaluation enregistrée avec succès.' : 'Erreur lors de l\'enregistrement de l\'évaluation.';
         $type = $success ? 'success' : 'error';
-        header('Location: index.php?page=evaluation_entreprise&id=' . $entrepriseId . '&' . $type . '=' . urlencode($message));
+        header('Location: index.php?page=evaluations&action=par_entreprise&id=' . $entrepriseId . '&' . $type . '=' . urlencode($message));
         exit;
     }
     

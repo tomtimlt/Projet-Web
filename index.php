@@ -106,10 +106,14 @@ $routes = [
 
     // Profil
     'edit_profile' => ['controller' => 'UserController', 'action' => 'editProfile'],
+    
+    // Gestion des utilisateurs
+    'users' => ['controller' => 'UserController', 'action' => 'index'],
+    'user' => ['controller' => 'UserController', 'action' => 'view'],
 ];
 
 // Gestion du paramètre action pour la rétrocompatibilité
-if ($action && in_array($page, ['companies', 'offers', 'students', 'pilots', 'wishlist', 'applications', 'pages', 'evaluations'])) {
+if ($action && in_array($page, ['companies', 'offers', 'students', 'pilots', 'wishlist', 'applications', 'pages', 'evaluations', 'user', 'users'])) {
     // Mappage des actions spéciales
     $actionMappings = [
         'companies' => [
@@ -154,6 +158,7 @@ if ($action && in_array($page, ['companies', 'offers', 'students', 'pilots', 'wi
             'apply' => 'apply',
             'view' => 'view',
             'update' => 'update',
+            'store' => 'store',
         ],
         'pages' => [
             'legal' => 'legal',
@@ -164,6 +169,18 @@ if ($action && in_array($page, ['companies', 'offers', 'students', 'pilots', 'wi
             'par_entreprise' => 'parEntreprise',
             'evaluer' => 'evaluer',
             'supprimer' => 'supprimer',
+        ],
+        'user' => [
+            'view' => 'view',
+            'create' => 'create',
+            'store' => 'create',
+            'edit' => 'editProfile',
+            'update' => 'editProfile',
+            'delete' => 'delete',
+            'change_password' => 'changePassword',
+        ],
+        'users' => [
+            'index' => 'index',
         ]
     ];
     
