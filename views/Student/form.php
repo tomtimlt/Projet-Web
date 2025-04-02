@@ -2,6 +2,11 @@
 $pageTitle = isset($student) ? "Modifier l'étudiant" : "Ajouter un étudiant";
 require_once __DIR__ . '/../Templates/header.php';
 $auth = \Models\Auth::getInstance();
+
+// Définir isEditMode s'il n'est pas déjà défini
+if (!isset($isEditMode)) {
+    $isEditMode = isset($student) && is_array($student) && !empty($student);
+}
 ?>
 
 <div class="container mt-4">
@@ -151,4 +156,4 @@ $auth = \Models\Auth::getInstance();
     })();
 </script>
 
-<?php require_once 'Views/footer.php'; ?>
+<?php require_once __DIR__ . '/../Templates/footer.php'; ?>

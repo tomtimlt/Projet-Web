@@ -263,7 +263,7 @@ class Offer
     {
         try {
             // Commencer une transaction
-            $this->db->getConnection()->beginTransaction();
+            $this->db->beginTransaction();
             
             // Vérifier si la compagnie existe
             $companyCheck = "SELECT id FROM companies WHERE id = :company_id";
@@ -271,15 +271,13 @@ class Offer
             $stmt->execute([':company_id' => $data['company_id']]);
             if ($stmt->rowCount() === 0) {
                 error_log("Erreur lors de la création de l'offre: La compagnie ID {$data['company_id']} n'existe pas");
-                $this->db->getConnection()->rollBack();
+                $this->db->rollBack();
                 return false;
             }
             
-            // Vérification simplifiée - juste les champs essentiels
-            $sql = "INSERT INTO offers (title, description, company_id, location, 
-                    start_date, end_date, status) 
-                    VALUES (:title, :description, :company_id, :location, 
-                    :start_date, :end_date, :status)";
+            // Définir les colonnes et paramètres de base qui existent certainement
+            $columns = ['title', 'description', 'company_id', 'location', 'start_date', 'end_date', 'status'];
+            $values = [':title', ':description', ':company_id', ':location', ':start_date', ':end_date', ':status'];
             
             $params = [
                 ':title' => $data['title'],
@@ -294,12 +292,10 @@ class Offer
             // Ajouter les champs optionnels uniquement s'ils sont supportés par la base de données
             // Vérifier si la colonne salary existe
             try {
-                $columnCheck = $this->db->query("SHOW COLUMNS FROM offers LIKE 'salary'", []);
+                $columnCheck = $this->db->query("SHOW COLUMNS FROM offers LIKE 'salary'");
                 if ($columnCheck->rowCount() > 0 && isset($data['salary'])) {
-                    $sql = "INSERT INTO offers (title, description, company_id, location, salary,
-                            start_date, end_date, status) 
-                            VALUES (:title, :description, :company_id, :location, :salary,
-                            :start_date, :end_date, :status)";
+                    $columns[] = 'salary';
+                    $values[] = ':salary';
                     $params[':salary'] = $data['salary'];
                 }
             } catch (\Exception $e) {
@@ -309,10 +305,10 @@ class Offer
             
             // Vérifier si la colonne skills_required existe
             try {
-                $columnCheck = $this->db->query("SHOW COLUMNS FROM offers LIKE 'skills_required'", []);
+                $columnCheck = $this->db->query("SHOW COLUMNS FROM offers LIKE 'skills_required'");
                 if ($columnCheck->rowCount() > 0 && isset($data['skills_required'])) {
-                    $sql = "INSERT INTO offers (title, description, company_id, location, start_date, end_date, skills_required, status) 
-                            VALUES (:title, :description, :company_id, :location, :start_date, :end_date, :skills_required, :status)";
+                    $columns[] = 'skills_required';
+                    $values[] = ':skills_required';
                     $params[':skills_required'] = $data['skills_required'];
                 }
             } catch (\Exception $e) {
@@ -320,24 +316,27 @@ class Offer
                 // Continuer sans cette colonne
             }
             
+            // Construire la requête SQL dynamiquement
+            $sql = "INSERT INTO offers (" . implode(", ", $columns) . ") VALUES (" . implode(", ", $values) . ")";
+            
             // Log des paramètres pour débogage
             error_log("Tentative d'insertion d'offre avec les paramètres: " . json_encode($params));
             error_log("SQL: " . $sql);
             
             $stmt = $this->db->prepare($sql);
             $stmt->execute($params);
-            $offerId = $this->db->getConnection()->lastInsertId();
+            $offerId = $this->db->lastInsertId();
             
             if (!$offerId) {
                 error_log("Erreur: Aucun ID d'offre retourné après insertion");
-                $this->db->getConnection()->rollBack();
+                $this->db->rollBack();
                 return false;
             }
             
             // Vérifier si la table offer_skills existe avant d'essayer d'insérer
             $tableExists = false;
             try {
-                $tableCheck = $this->db->query("SHOW TABLES LIKE 'offer_skills'", []);
+                $tableCheck = $this->db->query("SHOW TABLES LIKE 'offer_skills'");
                 $tableExists = ($tableCheck->rowCount() > 0);
             } catch (\Exception $e) {
                 error_log("Erreur lors de la vérification de l'existence de la table offer_skills: " . $e->getMessage());
@@ -363,7 +362,7 @@ class Offer
             }
             
             // Valider la transaction
-            $this->db->getConnection()->commit();
+            $this->db->commit();
             error_log("Offre créée avec succès, ID: $offerId");
             return $offerId;
             
@@ -372,8 +371,8 @@ class Offer
             error_log("Trace: " . $e->getTraceAsString());
             
             // Annuler la transaction
-            if ($this->db->getConnection()->inTransaction()) {
-                $this->db->getConnection()->rollBack();
+            if ($this->db->inTransaction()) {
+                $this->db->rollBack();
             }
             return false;
         }

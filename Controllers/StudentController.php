@@ -190,6 +190,9 @@ class StudentController
             exit;
         }
         
+        // Définir le mode (édition)
+        $isEditMode = true;
+        
         // Charger la vue
         require_once 'Views/Student/form.php';
     }
