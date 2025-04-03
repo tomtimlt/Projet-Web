@@ -67,7 +67,7 @@ class StudentController
         // Afficher la vue
         $pageTitle = 'Créer un compte étudiant';
         
-        require_once 'Views/Student/form.php';
+        require_once __DIR__ . '/../Views/Student/form.php';
     }
     
     /**
@@ -113,7 +113,7 @@ class StudentController
         
         // En cas d'erreur, afficher le formulaire à nouveau
         $pageTitle = 'Créer un compte étudiant';
-        require_once 'Views/Student/form.php';
+        require_once __DIR__ . '/../Views/Student/form.php';
     }
     
     /**
@@ -141,7 +141,7 @@ class StudentController
         
         // Afficher la vue
         $pageTitle = 'Modifier un compte étudiant';
-        require_once 'Views/Student/form.php';
+        require_once __DIR__ . '/../Views/Student/form.php';
     }
     
     /**
@@ -206,7 +206,7 @@ class StudentController
         
         // En cas d'erreur, afficher le formulaire à nouveau
         $pageTitle = 'Modifier un compte étudiant';
-        require_once 'Views/Student/form.php';
+        require_once __DIR__ . '/../Views/Student/form.php';
     }
     
     /**
@@ -231,7 +231,7 @@ class StudentController
         
         // Afficher la vue
         $pageTitle = 'Confirmer la suppression';
-        require_once 'Views/Student/delete.php';
+        require_once __DIR__ . '/../Views/Student/delete.php';
     }
     
     /**
@@ -297,7 +297,7 @@ class StudentController
         
         // Afficher la vue
         $pageTitle = 'Statistiques des étudiants';
-        require_once 'Views/Student/statistics.php';
+        require_once __DIR__ . '/../Views/Student/statistics.php';
     }
     
     /**

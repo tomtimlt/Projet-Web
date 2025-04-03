@@ -1,5 +1,10 @@
 <?php include_once __DIR__ . '/../Templates/header.php'; ?>
 
+<?php
+// Définir si nous sommes en mode édition ou création
+$isEditMode = isset($student['id']);
+?>
+
 <div class="container mt-4">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h1><i class="fas fa-user-graduate me-2"></i><?= $pageTitle ?></h1>
