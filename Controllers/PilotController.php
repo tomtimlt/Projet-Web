@@ -236,13 +236,30 @@ class PilotController
      */
     public function delete()
     {
-        // Récupérer l'ID du pilote (maintenant depuis POST)
-        $id = $_POST['id'] ?? ($_GET['id'] ?? 0); // Accepte les deux méthodes pour la rétrocompatibilité
+        // Vérifier que la requête est bien en POST pour plus de sécurité
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            header('Location: index.php?page=pilots');
+            exit;
+        }
+        
+        // Récupérer l'ID du pilote depuis POST uniquement
+        $id = $_POST['id'] ?? 0;
         
         if (!$id) {
             $_SESSION['flash'] = [
                 'type' => 'danger',
                 'message' => 'Identifiant de pilote invalide.'
+            ];
+            header('Location: index.php?page=pilots');
+            exit;
+        }
+        
+        // Vérifier que le pilote existe avant de tenter de le supprimer
+        $pilot = $this->pilotModel->getById($id);
+        if (!$pilot) {
+            $_SESSION['flash'] = [
+                'type' => 'danger',
+                'message' => 'Le pilote demandé n\'existe pas.'
             ];
             header('Location: index.php?page=pilots');
             exit;

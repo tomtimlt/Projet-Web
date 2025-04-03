@@ -211,7 +211,7 @@
                         </p>
                     <?php endif; ?>
                     
-                    <a href="index.php?page=company&action=view&id=<?= $offer['company_id'] ?>" class="btn btn-outline-primary btn-sm mt-2">
+                    <a href="index.php?page=company_view&id=<?= $offer['company_id'] ?>" class="btn btn-outline-primary btn-sm mt-2">
                         <i class="fas fa-info-circle me-1"></i>Voir le profil complet
                     </a>
                 </div>

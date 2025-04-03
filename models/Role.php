@@ -118,12 +118,161 @@ class Role {
     }
     
     /**
-     * Met a jour un role existant
+     * Met a jour un role existant<?php include 'views/layout.php'; ?>
+     
+     <div class="container py-4">
+         <nav aria-label="breadcrumb">
+             <ol class="breadcrumb">
+                 <li class="breadcrumb-item"><a href="index.php?page=users">Utilisateurs</a></li>
+                 <li class="breadcrumb-item">
+                     <a href="index.php?page=user&action=view&id=<?= $user['id'] ?>">
+                         <?= htmlspecialchars($user['prenom'].' '.$user['nom']) ?>
+                     </a>
+                 </li>
+                 <li class="breadcrumb-item active" aria-current="page">Modifier le profil</li>
+             </ol>
+         </nav>
+     
+         <div class="card shadow-sm">
+             <div class="card-header">
+                 <h2 class="h5 mb-0">
+                     <i class="fas fa-edit me-2"></i>Modifier le profil utilisateur
+                 </h2>
+             </div>
+             <div class="card-body">
+                 <form action="index.php?page=user&action=editProfile&id=<?= $user['id'] ?>" method="post" novalidate>
+                     <div class="row mb-3">
+                         <div class="col-md-6">
+                             <div class="mb-3">
+                                 <label for="nom" class="form-label">Nom <span class="text-danger">*</span></label>
+                                 <input type="text" class="form-control <?= isset($errors['nom']) ? 'is-invalid' : '' ?>" 
+                                     id="nom" name="nom" value="<?= htmlspecialchars($_POST['nom'] ?? $user['nom']) ?>" required>
+                                 <?php if (isset($errors['nom'])): ?>
+                                     <div class="invalid-feedback"><?= $errors['nom'] ?></div>
+                                 <?php endif; ?>
+                             </div>
+                         </div>
+                         <div class="col-md-6">
+                             <div class="mb-3">
+                                 <label for="prenom" class="form-label">Prénom <span class="text-danger">*</span></label>
+                                 <input type="text" class="form-control <?= isset($errors['prenom']) ? 'is-invalid' : '' ?>" 
+                                     id="prenom" name="prenom" value="<?= htmlspecialchars($_POST['prenom'] ?? $user['prenom']) ?>" required>
+                                 <?php if (isset($errors['prenom'])): ?>
+                                     <div class="invalid-feedback"><?= $errors['prenom'] ?></div>
+                                 <?php endif; ?>
+                             </div>
+                         </div>
+                     </div>
+                     
+                     <div class="mb-3">
+                         <label for="email" class="form-label">Email <span class="text-danger">*</span></label>
+                         <input type="email" class="form-control <?= isset($errors['email']) ? 'is-invalid' : '' ?>" 
+                             id="email" name="email" value="<?= htmlspecialchars($_POST['email'] ?? $user['email']) ?>" required>
+                         <?php if (isset($errors['email'])): ?>
+                             <div class="invalid-feedback"><?= $errors['email'] ?></div>
+                         <?php endif; ?>
+                     </div>
+                     
+                     <div class="mb-3">
+                         <label for="telephone" class="form-label">Téléphone</label>
+                         <input type="tel" class="form-control" id="telephone" name="telephone" 
+                             value="<?= htmlspecialchars($_POST['telephone'] ?? $user['telephone'] ?? '') ?>">
+                     </div>
+                     
+                     <?php if ($user['role'] === 'etudiant'): ?>
+                     <div class="row mb-3">
+                         <div class="col-md-6">
+                             <div class="mb-3">
+                                 <label for="centre" class="form-label">Centre</label>
+                                 <input type="text" class="form-control" id="centre" name="centre" 
+                                     value="<?= htmlspecialchars($_POST['centre'] ?? $user['centre'] ?? '') ?>">
+                             </div>
+                         </div>
+                         <div class="col-md-6">
+                             <div class="mb-3">
+                                 <label for="promotion" class="form-label">Promotion</label>
+                                 <input type="text" class="form-control" id="promotion" name="promotion" 
+                                     value="<?= htmlspecialchars($_POST['promotion'] ?? $user['promotion'] ?? '') ?>">
+                             </div>
+                         </div>
+                     </div>
+                     <?php endif; ?>
+                     
+                     <div class="d-flex justify-content-end">
+                         <a href="index.php?page=user&action=view&id=<?= $user['id'] ?>" class="btn btn-outline-secondary me-2">Annuler</a>
+                         <button type="submit" class="btn btn-primary">Enregistrer les modifications</button>
+                     </div>
+                 </form>
+             </div>
+         </div>
+     </div>
      * @param int $id ID du role
      * @param string $nom Nouveau nom du role
      * @param string $description Nouvelle description du role
      * @return bool Resultat de l'operation
-     */
+     */<?php include 'views/layout.php'; ?>
+     
+     <div class="container py-4">
+         <nav aria-label="breadcrumb">
+             <ol class="breadcrumb">
+                 <li class="breadcrumb-item"><a href="index.php?page=users">Utilisateurs</a></li>
+                 <li class="breadcrumb-item">
+                     <a href="index.php?page=user&action=view&id=<?= $user['id'] ?>">
+                         <?= htmlspecialchars($user['prenom'].' '.$user['nom']) ?>
+                     </a>
+                 </li>
+                 <li class="breadcrumb-item active" aria-current="page">Changer le mot de passe</li>
+             </ol>
+         </nav>
+     
+         <div class="card shadow-sm">
+             <div class="card-header">
+                 <h2 class="h5 mb-0">
+                     <i class="fas fa-key me-2"></i>Changer le mot de passe
+                 </h2>
+             </div>
+             <div class="card-body">
+                 <form action="index.php?page=user&action=changePassword&id=<?= $user['id'] ?>" method="post" novalidate>
+                     
+                     <?php if ($user['id'] == $this->auth->getUserId()): ?>
+                     <div class="mb-3">
+                         <label for="current_password" class="form-label">Mot de passe actuel <span class="text-danger">*</span></label>
+                         <input type="password" class="form-control <?= isset($errors['current_password']) ? 'is-invalid' : '' ?>" 
+                             id="current_password" name="current_password" required>
+                         <?php if (isset($errors['current_password'])): ?>
+                             <div class="invalid-feedback"><?= $errors['current_password'] ?></div>
+                         <?php endif; ?>
+                     </div>
+                     <?php endif; ?>
+                     
+                     <div class="mb-3">
+                         <label for="new_password" class="form-label">Nouveau mot de passe <span class="text-danger">*</span></label>
+                         <input type="password" class="form-control <?= isset($errors['new_password']) ? 'is-invalid' : '' ?>" 
+                             id="new_password" name="new_password" required>
+                         <?php if (isset($errors['new_password'])): ?>
+                             <div class="invalid-feedback"><?= $errors['new_password'] ?></div>
+                         <?php else: ?>
+                             <div class="form-text">Le mot de passe doit contenir au moins 8 caractères.</div>
+                         <?php endif; ?>
+                     </div>
+                     
+                     <div class="mb-3">
+                         <label for="confirm_password" class="form-label">Confirmer le nouveau mot de passe <span class="text-danger">*</span></label>
+                         <input type="password" class="form-control <?= isset($errors['confirm_password']) ? 'is-invalid' : '' ?>" 
+                             id="confirm_password" name="confirm_password" required>
+                         <?php if (isset($errors['confirm_password'])): ?>
+                             <div class="invalid-feedback"><?= $errors['confirm_password'] ?></div>
+                         <?php endif; ?>
+                     </div>
+                     
+                     <div class="d-flex justify-content-end">
+                         <a href="index.php?page=user&action=view&id=<?= $user['id'] ?>" class="btn btn-outline-secondary me-2">Annuler</a>
+                         <button type="submit" class="btn btn-primary">Changer le mot de passe</button>
+                     </div>
+                 </form>
+             </div>
+         </div>
+     </div>
     public function updateRole($id, $nom, $description = '') {
         $query = "UPDATE roles SET nom = :nom, description = :description WHERE id = :id";
         $stmt = $this->conn->prepare($query);

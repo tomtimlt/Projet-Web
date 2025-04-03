@@ -239,13 +239,30 @@ class StudentController
      */
     public function destroy()
     {
-        // Récupérer l'ID de l'étudiant (maintenant depuis POST)
+        // Vérifier si la requête est en POST
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            header('Location: index.php?page=students');
+            exit;
+        }
+        
+        // Récupérer l'ID de l'étudiant
         $id = $_POST['id'] ?? 0;
         
         if (!$id) {
             $_SESSION['flash'] = [
                 'type' => 'danger',
                 'message' => "Identifiant d'étudiant invalide."
+            ];
+            header('Location: index.php?page=students');
+            exit;
+        }
+        
+        // Vérifier si l'étudiant existe avant suppression
+        $student = $this->studentModel->getById($id);
+        if (!$student) {
+            $_SESSION['flash'] = [
+                'type' => 'danger',
+                'message' => "L'étudiant demandé n'existe pas."
             ];
             header('Location: index.php?page=students');
             exit;

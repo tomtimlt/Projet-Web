@@ -28,6 +28,7 @@
                 
                 <form method="post" action="index.php?page=students&action=destroy">
                     <input type="hidden" name="id" value="<?= $student['id'] ?>">
+                    <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?? '' ?>">
                     <div class="d-flex justify-content-between mt-4">
                         <button type="submit" class="btn btn-danger">
                             <i class="fas fa-trash me-1"></i>Supprimer définitivement

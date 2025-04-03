@@ -47,6 +47,7 @@
                 </a>
                 <form action="index.php?page=pilots&action=delete" method="post" style="display: inline;">
                     <input type="hidden" name="id" value="<?= $pilot['id'] ?>">
+                    <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?? '' ?>">
                     <button type="submit" class="btn btn-danger btn-lg">
                         <i class="fas fa-trash-alt me-1"></i>Supprimer définitivement
                     </button>
