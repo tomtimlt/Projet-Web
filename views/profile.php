@@ -10,7 +10,7 @@
         </div>
         <?php unset($_SESSION['success']); ?>
     <?php endif; ?>
-    
+
     <?php if (isset($_SESSION['error'])): ?>
         <div class="alert alert-danger alert-dismissible fade show" role="alert">
             <?= htmlspecialchars($_SESSION['error']) ?>
@@ -33,32 +33,41 @@
                         <h3><?= htmlspecialchars($user['firstname'] ?? '') ?> <?= htmlspecialchars($user['lastname'] ?? '') ?></h3>
                         <span class="badge bg-info"><?= htmlspecialchars($user['role'] ?? '') ?></span>
                     </div>
-                    
+
                     <ul class="list-group list-group-flush">
                         <li class="list-group-item d-flex justify-content-between">
                             <span><i class="fas fa-envelope me-2 text-primary"></i>Email:</span>
                             <span class="text-muted"><?= htmlspecialchars($user['email'] ?? '') ?></span>
                         </li>
-                        <?php if (isset($user['phone'])): ?>
-                        <li class="list-group-item d-flex justify-content-between">
-                            <span><i class="fas fa-phone me-2 text-primary"></i>Téléphone:</span>
-                            <span class="text-muted"><?= htmlspecialchars($user['phone'] ?? '') ?></span>
-                        </li>
+                        <?php if (!empty($user['telephone'])): ?>
+                            <li class="list-group-item d-flex justify-content-between">
+                                <span><i class="fas fa-phone me-2 text-primary"></i>Téléphone:</span>
+                                <span class="text-muted"><?= htmlspecialchars($user['telephone']) ?></span>
+                            </li>
                         <?php endif; ?>
-                        <?php if (isset($user['center'])): ?>
-                        <li class="list-group-item d-flex justify-content-between">
-                            <span><i class="fas fa-building me-2 text-primary"></i>Centre:</span>
-                            <span class="text-muted"><?= htmlspecialchars($user['center'] ?? '') ?></span>
-                        </li>
+
+                        <?php if (!empty($user['centre'])): ?>
+                            <li class="list-group-item d-flex justify-content-between">
+                                <span><i class="fas fa-building me-2 text-primary"></i>Centre:</span>
+                                <span class="text-muted"><?= htmlspecialchars($user['centre']) ?></span>
+                            </li>
                         <?php endif; ?>
+
+                        <?php if (!empty($user['promotion'])): ?>
+                            <li class="list-group-item d-flex justify-content-between">
+                                <span><i class="fas fa-graduation-cap me-2 text-primary"></i>Promotion:</span>
+                                <span class="text-muted"><?= htmlspecialchars($user['promotion']) ?></span>
+                            </li>
+                        <?php endif; ?>
+
                         <li class="list-group-item d-flex justify-content-between">
                             <span><i class="fas fa-key me-2 text-primary"></i>Rôle:</span>
                             <span class="text-muted"><?= htmlspecialchars($user['role'] ?? '') ?></span>
                         </li>
                     </ul>
-                    
+
                     <div class="d-grid gap-2 mt-3">
-                        <a href="index.php?page=profile&action=edit" class="btn btn-outline-primary">
+                        <a href="index.php?page=edit_profile" class="btn btn-outline-primary">
                             <i class="fas fa-edit me-2"></i>Modifier mon profil
                         </a>
                         <a href="index.php?page=password&action=change" class="btn btn-outline-secondary">
@@ -68,7 +77,7 @@
                 </div>
             </div>
         </div>
-        
+
         <div class="col-lg-8">
             <div class="card shadow-sm">
                 <div class="card-header bg-primary text-white">
@@ -78,7 +87,7 @@
                     <?php if ($user['role'] === 'etudiant'): ?>
                         <h5><i class="fas fa-user-graduate me-2 text-primary"></i>Espace Étudiant</h5>
                         <hr>
-                        
+
                         <div class="row mb-4">
                             <div class="col-md-6">
                                 <div class="card h-100 border-0 shadow-sm">
@@ -99,7 +108,7 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div class="card border-0 shadow-sm">
                             <div class="card-body">
                                 <h5 class="card-title"><i class="fas fa-briefcase me-2 text-primary"></i>Mon Stage</h5>
@@ -111,7 +120,7 @@
                     <?php elseif ($user['role'] === 'pilote'): ?>
                         <h5><i class="fas fa-user-tie me-2 text-primary"></i>Espace Pilote</h5>
                         <hr>
-                        
+
                         <div class="row mb-4">
                             <div class="col-md-6">
                                 <div class="card h-100 border-0 shadow-sm">
@@ -132,7 +141,7 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="card h-100 border-0 shadow-sm">
@@ -157,7 +166,7 @@
                     <?php elseif ($user['role'] === 'admin'): ?>
                         <h5><i class="fas fa-user-shield me-2 text-primary"></i>Espace Administrateur</h5>
                         <hr>
-                        
+
                         <div class="row mb-4">
                             <div class="col-md-6 mb-3">
                                 <div class="card h-100 border-0 shadow-sm">
@@ -178,7 +187,7 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <div class="card h-100 border-0 shadow-sm">
@@ -202,20 +211,20 @@
                     <?php endif; ?>
                 </div>
             </div>
-            
+
             <!-- Liste des étudiants - Visible uniquement pour les rôles autorisés -->
             <?php if (!empty($students) && $canViewStudents): ?>
-            <div class="card shadow-sm mt-4">
-                <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
-                    <h4 class="mb-0">Liste des Étudiants</h4>
-                    <a href="index.php?page=students&action=export" class="btn btn-sm btn-light">
-                        <i class="fas fa-download me-1"></i> Exporter
-                    </a>
-                </div>
-                <div class="card-body">
-                    <div class="table-responsive">
-                        <table class="table table-hover" id="students-table">
-                            <thead>
+                <div class="card shadow-sm mt-4">
+                    <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                        <h4 class="mb-0">Liste des Étudiants</h4>
+                        <a href="index.php?page=students&action=export" class="btn btn-sm btn-light">
+                            <i class="fas fa-download me-1"></i> Exporter
+                        </a>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-hover" id="students-table">
+                                <thead>
                                 <tr>
                                     <th>Nom</th>
                                     <th>Prénom</th>
@@ -223,38 +232,38 @@
                                     <th>Candidatures</th>
                                     <th>Actions</th>
                                 </tr>
-                            </thead>
-                            <tbody>
+                                </thead>
+                                <tbody>
                                 <?php foreach ($students as $student): ?>
-                                <tr>
-                                    <td><?= htmlspecialchars($student['lastname'] ?? '') ?></td>
-                                    <td><?= htmlspecialchars($student['firstname'] ?? '') ?></td>
-                                    <td><?= htmlspecialchars($student['email'] ?? '') ?></td>
-                                    <td>
-                                        <span class="badge bg-primary"><?= (int)($student['application_count'] ?? 0) ?></span>
-                                    </td>
-                                    <td>
-                                        <div class="btn-group btn-group-sm">
-                                            <a href="index.php?page=student&action=view&id=<?= $student['id'] ?>" class="btn btn-outline-primary" title="Voir le profil">
-                                                <i class="fas fa-eye"></i>
-                                            </a>
-                                            <?php if ($canEditUsers): ?>
-                                            <a href="index.php?page=student&action=edit&id=<?= $student['id'] ?>" class="btn btn-outline-secondary" title="Modifier">
-                                                <i class="fas fa-edit"></i>
-                                            </a>
-                                            <a href="index.php?page=password&action=change&id=<?= $student['id'] ?>" class="btn btn-outline-warning" title="Modifier le mot de passe">
-                                                <i class="fas fa-key"></i>
-                                            </a>
-                                            <?php endif; ?>
-                                        </div>
-                                    </td>
-                                </tr>
+                                    <tr>
+                                        <td><?= htmlspecialchars($student['lastname'] ?? '') ?></td>
+                                        <td><?= htmlspecialchars($student['firstname'] ?? '') ?></td>
+                                        <td><?= htmlspecialchars($student['email'] ?? '') ?></td>
+                                        <td>
+                                            <span class="badge bg-primary"><?= (int)($student['application_count'] ?? 0) ?></span>
+                                        </td>
+                                        <td>
+                                            <div class="btn-group btn-group-sm">
+                                                <a href="index.php?page=student&action=view&id=<?= $student['id'] ?>" class="btn btn-outline-primary" title="Voir le profil">
+                                                    <i class="fas fa-eye"></i>
+                                                </a>
+                                                <?php if ($canEditUsers): ?>
+                                                    <a href="index.php?page=student&action=edit&id=<?= $student['id'] ?>" class="btn btn-outline-secondary" title="Modifier">
+                                                        <i class="fas fa-edit"></i>
+                                                    </a>
+                                                    <a href="index.php?page=password&action=change&id=<?= $student['id'] ?>" class="btn btn-outline-warning" title="Modifier le mot de passe">
+                                                        <i class="fas fa-key"></i>
+                                                    </a>
+                                                <?php endif; ?>
+                                            </div>
+                                        </td>
+                                    </tr>
                                 <?php endforeach; ?>
-                            </tbody>
-                        </table>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
-            </div>
             <?php endif; ?>
         </div>
     </div>
@@ -262,28 +271,28 @@
 
 <!-- Script pour l'interactivité du tableau des étudiants -->
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    const studentsTable = document.getElementById('students-table');
-    if (studentsTable) {
-        // Fonction de recherche dans le tableau
-        const searchInput = document.createElement('input');
-        searchInput.classList.add('form-control', 'mb-3');
-        searchInput.setAttribute('placeholder', 'Rechercher un étudiant...');
-        searchInput.addEventListener('keyup', function() {
-            const searchTerm = searchInput.value.toLowerCase();
-            const rows = studentsTable.querySelectorAll('tbody tr');
-            
-            rows.forEach(row => {
-                const text = row.textContent.toLowerCase();
-                row.style.display = text.includes(searchTerm) ? '' : 'none';
+    document.addEventListener('DOMContentLoaded', function() {
+        const studentsTable = document.getElementById('students-table');
+        if (studentsTable) {
+            // Fonction de recherche dans le tableau
+            const searchInput = document.createElement('input');
+            searchInput.classList.add('form-control', 'mb-3');
+            searchInput.setAttribute('placeholder', 'Rechercher un étudiant...');
+            searchInput.addEventListener('keyup', function() {
+                const searchTerm = searchInput.value.toLowerCase();
+                const rows = studentsTable.querySelectorAll('tbody tr');
+
+                rows.forEach(row => {
+                    const text = row.textContent.toLowerCase();
+                    row.style.display = text.includes(searchTerm) ? '' : 'none';
+                });
             });
-        });
-        
-        // Insérer le champ de recherche avant le tableau
-        const tableContainer = studentsTable.parentNode;
-        tableContainer.insertBefore(searchInput, studentsTable);
-    }
-});
+
+            // Insérer le champ de recherche avant le tableau
+            const tableContainer = studentsTable.parentNode;
+            tableContainer.insertBefore(searchInput, studentsTable);
+        }
+    });
 </script>
 
 <?php require_once 'Templates/footer.php'; ?>
