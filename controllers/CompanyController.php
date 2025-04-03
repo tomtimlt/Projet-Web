@@ -311,34 +311,34 @@ class CompanyController
     /**
      * Gère l'évaluation d'une entreprise
      */
-    public function rate() 
+    public function rate()
     {
         // Vérifier que l'utilisateur est connecté et a la permission d'évaluer
         if (!$this->auth->hasPermission('SFx5')) {
             header('Location: index.php?page=unauthorized');
             exit;
         }
-        
+
         // Vérifier que la méthode est bien POST
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
             header('Location: index.php?page=companies');
             exit;
         }
-        
+
         // Récupérer l'ID de l'entreprise et la note
         $companyId = isset($_POST['entreprise_id']) ? (int)$_POST['entreprise_id'] : 0;
-        $rating = isset($_POST['note']) ? (int)$_POST['note'] : 0;
-        $comment = isset($_POST['commentaire']) ? trim($_POST['commentaire']) : '';
-        
+        $rating = isset($_POST['rating']) ? (int)$_POST['rating'] : 0;
+        $comment = isset($_POST['commentaire']) ? trim($_POST['commentaire']) : ''; // <-- ICI la bonne clé
+
         if (!$companyId || $rating < 1 || $rating > 5) {
             $this->redirectWithError('companies&action=view&id=' . $companyId, 'Données d\'évaluation invalides');
         }
-        
+
         // Vérifier que l'entreprise existe
         if (!$this->companyModel->getById($companyId)) {
             $this->redirectWithError('companies', 'Entreprise non trouvée');
         }
-        
+
         // Préparer les données de l'évaluation
         $ratingData = [
             'company_id' => $companyId,
@@ -346,18 +346,19 @@ class CompanyController
             'rating' => $rating,
             'comment' => $comment
         ];
-        
+
         // Enregistrer l'évaluation
         $result = $this->ratingModel->saveRating($ratingData);
-        
+
         if (!$result) {
             $this->redirectWithError('companies&action=view&id=' . $companyId, 'Une erreur est survenue lors de l\'enregistrement de l\'évaluation');
         }
-        
+
         // Rediriger vers la page de détails de l'entreprise avec un message de succès
         $this->redirectWithSuccess('companies&action=view&id=' . $companyId, 'Évaluation enregistrée avec succès');
     }
-    
+
+
     /**
      * Supprime une évaluation
      */

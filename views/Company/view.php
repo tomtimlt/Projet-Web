@@ -104,42 +104,42 @@ require_once __DIR__ . '/../Templates/header.php';
                         
                         <!-- Ajout d'une évaluation -->
                         <?php if ($this->auth->hasPermission('SFx5') && !$hasRated): ?>
-                        <div class="card">
-                            <div class="card-header bg-success text-white">
-                                <h4 class="mb-0">Évaluer cette entreprise</h4>
-                            </div>
-                            <div class="card-body">
-                                <form action="index.php?page=companies&action=rate" method="post">
-                                    <input type="hidden" name="company_id" value="<?= $company['id'] ?>">
-                                    
-                                    <div class="mb-3">
-                                        <label for="rating" class="form-label">Note</label>
-                                        <div class="rating-input">
+                            <div class="card">
+                                <div class="card-header bg-success text-white">
+                                    <h4 class="mb-0">Évaluer cette entreprise</h4>
+                                </div>
+                                <div class="card-body">
+                                    <form action="index.php?page=companies&action=rate" method="post">
+                                        <input type="hidden" name="entreprise_id" value="<?= $company['id'] ?>">
+
+                                        <div class="mb-3">
+                                            <label class="form-label">Note</label>
                                             <div class="star-rating">
                                                 <?php for ($i = 1; $i <= 5; $i++): ?>
-                                                <input type="radio" id="star<?= $i ?>" name="rating" value="<?= $i ?>" required <?= $i === 5 ? 'checked' : '' ?>>
-                                                <label for="star<?= $i ?>"><i class="fas fa-star"></i></label>
+                                                    <input type="radio" id="star<?= $i ?>" name="rating" value="<?= $i ?>" required <?= $i === 5 ? 'checked' : '' ?>>
+                                                    <label for="star<?= $i ?>"><i class="fas fa-star"></i></label>
                                                 <?php endfor; ?>
                                             </div>
                                         </div>
-                                    </div>
-                                    
-                                    <div class="mb-3">
-                                        <label for="comment" class="form-label">Commentaire</label>
-                                        <textarea class="form-control" id="comment" name="comment" rows="3" placeholder="Partagez votre expérience avec cette entreprise..."></textarea>
-                                    </div>
-                                    
-                                    <button type="submit" class="btn btn-success w-100">
-                                        <i class="fas fa-paper-plane"></i> Envoyer l'évaluation
-                                    </button>
-                                </form>
+
+                                        <div class="mb-3">
+                                            <label class="form-label">Commentaire</label>
+                                            <textarea class="form-control" name="commentaire" rows="3" placeholder="Partagez votre expérience avec cette entreprise..."></textarea>
+                                        </div>
+
+                                        <button type="submit" class="btn btn-success w-100">
+                                            <i class="fas fa-paper-plane"></i> Envoyer l'évaluation
+                                        </button>
+                                    </form>
+
+                                </div>
                             </div>
-                        </div>
                         <?php elseif ($this->auth->hasPermission('SFx5') && $hasRated): ?>
-                        <div class="alert alert-info">
-                            <i class="fas fa-info-circle"></i> Vous avez déjà évalué cette entreprise.
-                        </div>
+                            <div class="alert alert-info">
+                                <i class="fas fa-info-circle"></i> Vous avez déjà évalué cette entreprise.
+                            </div>
                         <?php endif; ?>
+
                     </div>
                 </div>
             </div>

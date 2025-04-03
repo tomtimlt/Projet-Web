@@ -82,6 +82,7 @@ class CompanyRating
         try {
             // Utiliser l'instance $this->db déjà initialisée dans le constructeur
             $this->db->query($sql, $params);
+            error_log(" Évaluation enregistrée ou mise à jour avec succès");
             return true;
         } catch (\Exception $e) {
             error_log("Erreur lors de l'enregistrement de l'évaluation: " . $e->getMessage());

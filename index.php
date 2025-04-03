@@ -124,6 +124,10 @@ if ($action && in_array($page, ['companies', 'offers', 'students', 'pilots', 'wi
             'update' => 'update',
             'delete' => 'delete',
             'view' => 'view',
+            'rate' => 'rate',
+            'deleteRating' => 'deleteRating',
+
+
         ],
         'offers' => [
             'create' => 'create',
