@@ -27,7 +27,7 @@ jobs:
         run: |
           rsync -avz --exclude='.git/' --exclude='.github/' \
             --exclude='vendor/' --exclude='node_modules/' \
-            --exclude='.env' --delete ./ ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }}:/var/www/html/
+            --exclude='.env' --delete ./ ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }}:/var/www/cesi-demo-baptiste
           
           # Set appropriate permissions
           ssh ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }} 'cd /var/www/cesi-demo-baptiste && \
