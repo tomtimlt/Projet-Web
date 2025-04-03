@@ -30,7 +30,7 @@ jobs:
             --exclude='.env' --delete ./ ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }}:/var/www/html/
           
           # Set appropriate permissions
-          ssh ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }} 'cd /var/www/html && \
+          ssh ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }} 'cd /var/www/cesi-demo-baptiste && \
             chmod -R 755 . && \
             find . -type d -exec chmod 755 {} \; && \
             find . -type f -exec chmod 644 {} \; && \
