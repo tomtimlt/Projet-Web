@@ -6,7 +6,7 @@ return [
     'host' => 'localhost',
     'dbname' => 'projet_web',
     'username' => 'baptisteremote',
-    'password' => 'Mojoli969er',
+    'password' => 'Mojoli969er%',
     'charset' => 'utf8',
     'options' => [
         PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
