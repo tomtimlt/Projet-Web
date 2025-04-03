@@ -242,7 +242,7 @@ class PilotController
             exit;
         }
         
-        // Récupérer l'ID du pilote depuis POST uniquement
+        // Récupérer l'ID du pilote depuis POST uniquement TEST GITHUB
         $id = $_POST['id'] ?? 0;
         
         if (!$id) {
