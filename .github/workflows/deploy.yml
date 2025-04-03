@@ -3,7 +3,7 @@ name: Deploy website via SSH
 on:
   push:
     branches:
-      - main  # Modify this if your main branch is different
+      - main
 
 jobs:
   deploy:
@@ -18,20 +18,9 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
-      - name: Add server to known hosts
-        run: |
-          mkdir -p ~/.ssh
-          ssh-keyscan ${{ secrets.SERVER_IP }} >> ~/.ssh/known_hosts
-
       - name: Deploy files to Azure Debian server
         run: |
-          rsync -avz --exclude='.git/' --exclude='.github/' \
-            --exclude='vendor/' --exclude='node_modules/' \
-            --exclude='.env' --delete ./ ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }}:/var/www/cesi-demo-baptiste
-          
-          # Set appropriate permissions
-          ssh ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }} 'cd /var/www/cesi-demo-baptiste && \
-            chmod -R 755 . && \
-            find . -type d -exec chmod 755 {} \; && \
-            find . -type f -exec chmod 644 {} \; && \
-            echo "Deployment completed successfully!"'
+          rsync -avz --delete \
+            --exclude='.git/' \
+            --exclude='.github/' \
+            ./ ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }}:/var/www/cesi-demo-baptiste/
