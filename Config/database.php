@@ -5,8 +5,8 @@
 return [
     'host' => 'localhost',
     'dbname' => 'projet_web',
-    'username' => 'root',
-    'password' => '',
+    'username' => 'webuser',
+    'password' => 'motdepasse123',
     'charset' => 'utf8',
     'options' => [
         PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
