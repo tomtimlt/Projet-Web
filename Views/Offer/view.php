@@ -147,7 +147,7 @@
                             <?php if ($isLoggedIn): ?>
                             <div class="col-md-6 mb-2">
                                 <?php if (!$hasApplied): ?>
-                                    <a href="index.php?page=applications&action=apply&id=<?= $offer['id'] ?>" class="btn btn-primary w-100">
+                                    <a href="index.php?page=applications&action=apply&offer_id=<?= $offer['id'] ?>" class="btn btn-primary w-100">
                                         <i class="fas fa-paper-plane me-2"></i>Postuler
                                     </a>
                                 <?php else: ?>

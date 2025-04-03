@@ -1,6 +1,6 @@
 <?php
 $pageTitle = 'Évaluations de ' . htmlspecialchars($entreprise->name);
-require_once 'views/templates/header.php';
+require_once 'views/Templates/header.php';
 ?>
 
 <div class="evaluations-container">
@@ -288,7 +288,7 @@ require_once 'views/templates/header.php';
         font-size: 30px;
         color: #ddd;
         cursor: pointer;
-        margin: 0;
+        margin: 0 2px;
         transition: color 0.2s;
     }
     

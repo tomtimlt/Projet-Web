@@ -125,9 +125,9 @@
                             <div class="col-md-6">
                                 <div class="card h-100 border-0 shadow-sm">
                                     <div class="card-body">
-                                        <h5 class="card-title"><i class="fas fa-users me-2 text-primary"></i>Mes Étudiants</h5>
-                                        <p class="card-text">Gérez les étudiants sous votre responsabilité.</p>
-                                        <a href="index.php?page=my-students" class="btn btn-sm btn-primary">Accéder</a>
+                                        <h5 class="card-title"><i class="fas fa-users me-2 text-primary"></i>Étudiants</h5>
+                                        <p class="card-text">Gérez les étudiants.</p>
+                                        <a href="index.php?page=students" class="btn btn-sm btn-primary">Accéder</a>
                                     </div>
                                 </div>
                             </div>
@@ -156,8 +156,8 @@
                                 <div class="card h-100 border-0 shadow-sm">
                                     <div class="card-body">
                                         <h5 class="card-title"><i class="fas fa-chart-bar me-2 text-primary"></i>Statistiques</h5>
-                                        <p class="card-text">Consultez les statistiques et rapports.</p>
-                                        <a href="index.php?page=statistics" class="btn btn-sm btn-primary">Accéder</a>
+                                        <p class="card-text">Consultez les statistiques des offres.</p>
+                                        <a href="index.php?page=offers&action=statistics" class="btn btn-sm btn-primary">Accéder</a>
                                     </div>
                                 </div>
                             </div>
@@ -173,7 +173,7 @@
                                     <div class="card-body">
                                         <h5 class="card-title"><i class="fas fa-users me-2 text-primary"></i>Utilisateurs</h5>
                                         <p class="card-text">Gérez tous les utilisateurs du système.</p>
-                                        <a href="index.php?page=users" class="btn btn-sm btn-primary">Accéder</a>
+                                        <a href="index.php?page=students" class="btn btn-sm btn-primary">Accéder</a>
                                     </div>
                                 </div>
                             </div>

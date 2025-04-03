@@ -1,6 +1,6 @@
 <?php
 $pageTitle = htmlspecialchars($entreprise->nom);
-require_once 'views/templates/header.php';
+require_once 'views/Templates/header.php';
 ?>
 
 <div class="company-details-container">

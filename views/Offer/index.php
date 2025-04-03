@@ -1,5 +1,12 @@
 <?php include_once __DIR__ . '/../Templates/header.php'; ?>
 
+
+<?php
+$isLoggedIn = isset($this->auth) && $this->auth->isLoggedIn();
+?>
+
+
+
 <div class="container py-4">
     <div class="row mb-4">
         <div class="col-12">
@@ -114,6 +121,14 @@
                                 </thead>
                                 <tbody>
                                     <?php foreach ($offers as $offer): ?>
+                                        <?php
+$isInWishlist = false;
+if ($isLoggedIn) {
+    $wishlistModel = new \Models\Wishlist();
+    $isInWishlist = $wishlistModel->isInWishlist($this->auth->getUserId(), $offer['id']);
+}
+?>
+
                                         <tr>
                                             <td><?= htmlspecialchars($offer['title']) ?></td>
                                             <td><?= htmlspecialchars($offer['company_name']) ?></td>
@@ -147,24 +162,28 @@
                                                                 <i class="fas fa-paper-plane"></i>
                                                             </a>
                                                         <?php endif; ?>
-                                                        
-                                                        <?php 
-                                                            $inWishlist = isset($offer['in_wishlist']) ? $offer['in_wishlist'] : false;
-                                                            $wishlistAction = $inWishlist 
-                                                                ? 'remove-from-wishlist' 
-                                                                : 'add-to-wishlist';
-                                                            $wishlistIcon = $inWishlist 
-                                                                ? 'fas fa-heart text-danger' 
-                                                                : 'far fa-heart';
-                                                            $wishlistTitle = $inWishlist 
-                                                                ? 'Retirer des favoris' 
-                                                                : 'Ajouter aux favoris';
-                                                        ?>
-                                                        <a href="index.php?page=wishlist&action=<?= $wishlistAction ?>&offer_id=<?= $offer['id'] ?>" 
-                                                           class="btn btn-outline-info wishlist-btn" title="<?= $wishlistTitle ?>"
-                                                           data-offer-id="<?= $offer['id'] ?>" data-in-wishlist="<?= $inWishlist ? '1' : '0' ?>">
-                                                            <i class="<?= $wishlistIcon ?>"></i>
-                                                        </a>
+                                                      <!-- Wishlist button -->
+                                                      <?php
+$isInWishlist = false;
+if ($isLoggedIn) {
+    $wishlistModel = new \Models\Wishlist();
+    $isInWishlist = $wishlistModel->isInWishlist($this->auth->getUserId(), $offer['id']);
+}
+
+$wishlistAction = $isInWishlist ? 'remove' : 'add';
+$wishlistClass  = $isInWishlist ? 'btn btn-warning' : 'btn btn-outline-warning';
+$wishlistIcon   = $isInWishlist ? 'fas fa-heart' : 'far fa-heart';
+$wishlistTitle  = $isInWishlist ? 'Retirer de la wishlist' : 'Ajouter à la wishlist';
+?>
+
+<a href="index.php?page=wishlist&action=<?= $wishlistAction ?>&id=<?= $offer['id'] ?>"
+   class="<?= $wishlistClass ?> btn-sm" 
+   title="<?= $wishlistTitle ?>">
+    <i class="<?= $wishlistIcon ?> me-1"></i>
+    <?= $isInWishlist ? 'Retirer' : 'Ajouter' ?>
+</a>
+
+  
                                                     <?php endif; ?>
                                                     
                                                     <?php if ($this->auth->hasPermission('SFx9')): ?>
@@ -258,6 +277,8 @@
 </div>
 
 <script>
+
+
 document.addEventListener('DOMContentLoaded', function() {
     // Gestion de la suppression
     const deleteModal = document.getElementById('deleteModal');
@@ -295,11 +316,15 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // Réinitialisation des filtres
-    resetButton.addEventListener('click', function() {
-        searchForm.reset();
-        performSearch();
+document.addEventListener('DOMContentLoaded', function () {
+    const resetButton = document.getElementById('resetSearch');
+    const searchForm = document.getElementById('searchForm');
+
+    resetButton.addEventListener('click', function () {
+        searchForm.reset(); // Réinitialise le formulaire
+        searchForm.submit(); // Relance la recherche
     });
+});
 
     // Exécution de la recherche
     function performSearch() {
