@@ -47,7 +47,8 @@ class OfferController
         $offers = $this->offerModel->getAll($filters, $limit, $offset);
         $totalOffers = $this->offerModel->countAll($filters);
         $totalPages = ceil($totalOffers / $limit);
-        
+        // Définir la variable currentPage pour la vue
+$currentPage = $page;
         // Récupérer les données pour les filtres
         $companies = $this->companyModel->getAll();
         $skills = $this->skillModel->getAllByCategory();
@@ -511,4 +512,19 @@ class OfferController
         header("Location: index.php?page=$page");
         exit;
     }
+
+    /**
+ * Construit l'URL de pagination en conservant les filtres
+ * 
+ * @param int $page Numéro de page
+ * @return string URL de pagination
+ */
+private function buildPaginationUrl($page)
+{
+    $params = $_GET;
+    $params['page'] = 'offers';
+    $params['page_num'] = $page;
+    
+    return 'index.php?' . http_build_query($params);
+}
 }
