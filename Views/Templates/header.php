@@ -136,9 +136,6 @@ $auth = \Models\Auth::getInstance();
                                 </li>
                                 <?php if ($auth->hasRole(['admin'])): ?>
                                     <li>
-                                        <a class="dropdown-item" href="index.php?page=admin">
-                                            <i class="fas fa-tools me-1"></i>Administration
-                                        </a>
                                     </li>
                                 <?php endif; ?>
                                 <li><hr class="dropdown-divider"></li>
