@@ -198,15 +198,6 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-6 mb-3">
-                                <div class="card h-100 border-0 shadow-sm">
-                                    <div class="card-body">
-                                        <h5 class="card-title"><i class="fas fa-cog me-2 text-primary"></i>Paramètres</h5>
-                                        <p class="card-text">Configurez les paramètres généraux du système.</p>
-                                        <a href="index.php?page=settings" class="btn btn-sm btn-primary">Accéder</a>
-                                    </div>
-                                </div>
-                            </div>
                         </div>
                     <?php endif; ?>
                 </div>
