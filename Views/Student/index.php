@@ -82,10 +82,10 @@
                                                class="btn btn-outline-primary" title="Modifier">
                                                 <i class="fas fa-edit"></i>
                                             </a>
-                                            <a href="index.php?page=students&action=confirm-delete&id=<?= $stu['id'] ?>" 
-                                               class="btn btn-outline-danger" title="Supprimer">
-                                                <i class="fas fa-trash"></i>
-                                            </a>
+                                            <a href="index.php?page=student_delete&id=<?= $stu['id'] ?>" 
+   class="btn btn-outline-danger" title="Supprimer">
+    <i class="fas fa-trash"></i>
+</a>
                                         </div>
                                     </td>
                                 </tr>

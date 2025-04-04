@@ -96,6 +96,8 @@ $routes = [
     'student_delete' => ['controller' => 'StudentController', 'action' => 'delete'],
     'student_destroy' => ['controller' => 'StudentController', 'action' => 'destroy'],
     'student_statistics' => ['controller' => 'StudentController', 'action' => 'statistics'],
+    'confirm-delete' => 'delete',
+    'destroy' => 'destroy',
     
     // Routes des candidatures
     'wishlist' => ['controller' => 'WishlistController', 'action' => 'index'],

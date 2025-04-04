@@ -212,28 +212,30 @@ class StudentController
     /**
      * Affiche la page de confirmation de suppression d'un étudiant
      */
-    public function confirmDelete()
-    {
-        // Récupérer l'ID de l'étudiant
-        $id = $_GET['id'] ?? 0;
-        
-        // Récupérer les données de l'étudiant
-        $student = $this->studentModel->getById($id);
-        
-        if (!$student) {
-            $_SESSION['flash'] = [
-                'type' => 'danger',
-                'message' => "L'étudiant demandé n'existe pas."
-            ];
-            header('Location: index.php?page=students');
-            exit;
-        }
-        
-        // Afficher la vue
-        $pageTitle = 'Confirmer la suppression';
-        require_once __DIR__ . '/../Views/Student/delete.php';
+/**
+ * Affiche la page de confirmation de suppression d'un étudiant
+ */
+public function delete()
+{
+    // Récupérer l'ID de l'étudiant
+    $id = $_GET['id'] ?? 0;
+    
+    // Récupérer les données de l'étudiant
+    $student = $this->studentModel->getById($id);
+    
+    if (!$student) {
+        $_SESSION['flash'] = [
+            'type' => 'danger',
+            'message' => "L'étudiant demandé n'existe pas."
+        ];
+        header('Location: index.php?page=students');
+        exit;
     }
     
+    // Afficher la vue
+    $pageTitle = 'Confirmer la suppression';
+    require_once __DIR__ . '/../Views/Student/delete.php';
+}
     /**
      * Traite la suppression d'un étudiant
      */

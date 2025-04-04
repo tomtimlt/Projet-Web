@@ -26,18 +26,18 @@
                     </p>
                 </div>
                 
-                <form method="post" action="index.php?page=students&action=destroy">
-                    <input type="hidden" name="id" value="<?= $student['id'] ?>">
-                    <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?? '' ?>">
-                    <div class="d-flex justify-content-between mt-4">
-                        <button type="submit" class="btn btn-danger">
-                            <i class="fas fa-trash me-1"></i>Supprimer définitivement
-                        </button>
-                        <a href="index.php?page=students" class="btn btn-outline-secondary">
-                            <i class="fas fa-times me-1"></i>Annuler
-                        </a>
-                    </div>
-                </form>
+                <form method="post" action="index.php?page=student_destroy">
+    <input type="hidden" name="id" value="<?= $student['id'] ?>">
+    <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?? '' ?>">
+    <div class="d-flex justify-content-between mt-4">
+        <button type="submit" class="btn btn-danger">
+            <i class="fas fa-trash me-1"></i>Supprimer définitivement
+        </button>
+        <a href="index.php?page=students" class="btn btn-outline-secondary">
+            <i class="fas fa-times me-1"></i>Annuler
+        </a>
+    </div>
+</form>
             </div>
         </div>
     <?php else: ?>
